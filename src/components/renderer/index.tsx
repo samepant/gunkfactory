@@ -14,15 +14,6 @@ import { Geom2, Geom3 } from "@jscad/modeling/src/geometries/types";
 import classes from "./renderer.module.css";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { initialState } from "./initial";
-import { colorize } from "@jscad/modeling/src/colors";
-import {
-  cube,
-  cuboid,
-  line,
-  sphere,
-  star,
-} from "@jscad/modeling/src/primitives";
-import { booleans } from "@jscad/modeling";
 
 export interface RendererProps {
   animate?: boolean;
@@ -69,8 +60,6 @@ export interface RendererState {
 }
 
 const Renderer = (props: RendererProps) => {
-  console.log("Renderer props", props);
-
   const perspectiveCamera = useRef(cameras.perspective);
   const orbitControls = useRef(controls.orbit);
   const cadElement = useRef<HTMLDivElement>(null);
@@ -93,12 +82,11 @@ const Renderer = (props: RendererProps) => {
   const state = useRef<RendererState>(initialState(props.options));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderer = useRef<((content: any) => void) | null>(null);
-  const entities = useRef(
-    entitiesFromSolids(
-      {},
-      star({ vertices: 8, innerRadius: 300, outerRadius: 400 })
-    )
-  );
+  const entities = useRef(entitiesFromSolids({}, ...props.solids));
+
+  useEffect(() => {
+    entities.current = entitiesFromSolids({}, ...props.solids);
+  }, [props.solids]);
 
   useEffect(() => {
     // setup to only run once
@@ -146,18 +134,6 @@ const Renderer = (props: RendererProps) => {
     ticks: [25, 5],
     color: [186, 217, 55, 1],
     subColor: [186, 217, 55, 0.5],
-  };
-
-  const axisOptions = {
-    visuals: {
-      drawCmd: "drawAxis",
-      show: true,
-    },
-    size: 300,
-    // alwaysVisible: false,
-    // xColor: [0, 0, 1, 1],
-    // yColor: [1, 0, 1, 1],
-    // zColor: [0, 0, 0, 1]
   };
 
   // the heart of rendering, as themes, controls, etc change
@@ -264,7 +240,7 @@ const Renderer = (props: RendererProps) => {
           drawMesh: drawCommands.drawMesh,
         },
         // define the visual content
-        entities: [gridOptions, axisOptions, ...entities.current],
+        entities: [gridOptions, ...entities.current],
       });
     }
     window.requestAnimationFrame(updateAndRender);
@@ -341,48 +317,3 @@ const Renderer = (props: RendererProps) => {
 };
 
 export default Renderer;
-
-const demo = (parameters: { scale: number }) => {
-  const logo = [
-    colorize(
-      [1.0, 0.4, 1.0],
-      booleans.subtract(cube({ size: 300 }), sphere({ radius: 200 }))
-    ),
-    colorize(
-      [1.0, 1.0, 0],
-      booleans.intersect(sphere({ radius: 130 }), cube({ size: 210 }))
-    ),
-  ];
-
-  const transpCube = colorize(
-    [1, 0, 0, 0.75],
-    cuboid({
-      size: [100 * parameters.scale, 100, 210 + 200 * parameters.scale],
-    })
-  );
-  const star2D = star({ vertices: 8, innerRadius: 300, outerRadius: 400 });
-  const line2D = colorize(
-    [1.0, 0, 0],
-    line([
-      [260, 260],
-      [-260, 260],
-      [-260, -260],
-      [260, -260],
-      [260, 260],
-    ])
-  );
-  // some colors are intentionally without alpfa channel to test geom2ToGeometries will add alpha channel
-  // const colorChange = [
-  //   [1, 0, 0, 1],
-  //   [1, 0.5, 0],
-  //   [1, 0, 1],
-  //   [0, 1, 0],
-  //   [0, 0, 0.7],
-  // ];
-  star2D.sides.forEach((side) => {
-    console.log("side", side);
-    // if (i >= 2) side.color = colorChange[i % colorChange.length];
-  });
-
-  return [transpCube, star2D, line2D, ...logo] as Geom2[];
-};
