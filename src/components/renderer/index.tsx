@@ -72,7 +72,9 @@ const Renderer = (props: RendererProps) => {
 
   const rotateSpeed = 0.002;
   const panSpeed = 1;
-  const zoomSpeed = 0.08;
+  const zoomSpeed = 0.02;
+  const zoomMin = 3;
+  const zoomMax = 400;
 
   const rotateDelta = useRef([0, 0]);
   const panDelta = useRef([0, 0]);
@@ -95,10 +97,16 @@ const Renderer = (props: RendererProps) => {
     width.current = cadElement.current.clientWidth;
     height.current = cadElement.current.clientHeight;
 
-    // prepare the camera
+    // prepare the camera for birds eye view
+    const defaultOverrides = {
+      position: [0, 0, 100],
+      target: [0, 0, 0],
+    };
+
     state.current.camera = Object.assign(
       {},
-      perspectiveCamera.current.defaults
+      cameras.perspective.defaults,
+      defaultOverrides
     );
 
     if (state.current.camera === undefined) return;
@@ -131,7 +139,7 @@ const Renderer = (props: RendererProps) => {
       show: true,
     },
     size: [500, 500],
-    ticks: [25, 5],
+    ticks: [10, 1],
     color: [186, 217, 55, 1],
     subColor: [186, 217, 55, 0.5],
   };
@@ -145,6 +153,7 @@ const Renderer = (props: RendererProps) => {
       state.current.controls === undefined
     )
       return;
+
     if (rotateDelta.current[0] || rotateDelta.current[1]) {
       const updated = orbitControls.current.rotate(
         {
@@ -189,6 +198,7 @@ const Renderer = (props: RendererProps) => {
         },
         zoomDelta.current
       );
+
       state.current.controls = {
         ...state.current.controls,
         ...updated.controls,
@@ -216,6 +226,14 @@ const Renderer = (props: RendererProps) => {
         ...updates.controls,
       };
       updateView.current = updates.controls.changed; // for elasticity in rotate / zoom
+
+      // enforce zoom limits
+      if (updates.camera.position[2] < zoomMin) {
+        updates.camera.position[2] = zoomMin;
+      }
+      if (updates.camera.position[2] > zoomMax) {
+        updates.camera.position[2] = zoomMax;
+      }
 
       state.current.camera = { ...state.current.camera, ...updates.camera };
       perspectiveCamera.current.update(state.current.camera);
@@ -265,11 +283,11 @@ const Renderer = (props: RendererProps) => {
 
     const shiftKey = ev.shiftKey === true;
     if (shiftKey) {
+      rotateDelta.current[0] -= dx;
+      // rotateDelta.current[1] -= dy;
+    } else {
       panDelta.current[0] += dx;
       panDelta.current[1] += dy;
-    } else {
-      rotateDelta.current[0] -= dx;
-      rotateDelta.current[1] -= dy;
     }
 
     lastX.current = ev.pageX;

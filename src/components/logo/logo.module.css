@@ -1,0 +1,13 @@
+.svg {
+  height: 100%;
+  width: auto;
+}
+
+.group {
+  mix-blend-mode: screen;
+}
+
+.svg path {
+  stroke: rgba(255, 255, 255, 1);
+  stroke-width: 2px;
+}
