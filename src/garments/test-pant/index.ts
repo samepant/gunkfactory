@@ -45,11 +45,6 @@ const testPant = (): Garment => {
         slug: "hem",
         type: "number",
       },
-      {
-        name: "unit",
-        slug: "unit",
-        type: "string",
-      },
     ],
     unit: "cm",
   };
