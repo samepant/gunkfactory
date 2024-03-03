@@ -5,10 +5,13 @@ import classes from "./homepage.module.css";
 import Logo from "../logo";
 import garments from "../../garments";
 import bracketUrl from "../../assets/bracket.svg";
+import Renderer from "../renderer";
 
 const Homepage = () => {
   const location = useLocation();
   const showIntro = location.pathname === "/";
+  const showDummyGrid =
+    location.pathname === "/" || location.pathname === "/sloper";
   return (
     <>
       <Nav />
@@ -71,6 +74,7 @@ const Homepage = () => {
           </div>
         </div>
       )}
+      {showDummyGrid && <Renderer solids={[]} />}
     </>
   );
 };
