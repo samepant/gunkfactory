@@ -2,13 +2,11 @@ import { FullSloper } from "../../measurements/measurement";
 import { emptySloper } from "../../measurements";
 import croquiUrl from "../../assets/croqui.png";
 import classes from "./sloper.module.css";
+import { useContext } from "react";
+import { SloperContext } from "../../main";
 
-interface SloperProps {
-  setSloper: (sloper: FullSloper) => void;
-  sloper?: FullSloper | null;
-}
-
-const Sloper: React.FC<SloperProps> = ({ setSloper, sloper }) => {
+const Sloper: React.FC = () => {
+  const { sloper, setSloper } = useContext(SloperContext);
   return (
     <div className={classes.container}>
       <div className={classes.modal}>
