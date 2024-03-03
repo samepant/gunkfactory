@@ -49,3 +49,21 @@ h6 {
   font-weight: 400;
   font-size: 1em;
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+button {
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  padding: 4px 8px;
+  margin: 0;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

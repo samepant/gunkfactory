@@ -271,7 +271,7 @@ const Renderer = (props: RendererProps) => {
     return () => {
       cancelAnimationFrame(requestId.current);
     };
-  }, []);
+  });
 
   // convert HTML events (mouse movement) to viewer changes
 

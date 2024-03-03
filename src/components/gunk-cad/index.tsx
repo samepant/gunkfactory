@@ -9,7 +9,7 @@ const GunkCad = () => {
     return <Renderer solids={garment.components} />;
   }
 
-  return <div>Loading garment . . .</div>;
+  return null;
 };
 
 export default GunkCad;

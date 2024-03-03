@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from "./routes/root.tsx";
 import "./index.css";
 import { FullSloper } from "./measurements/measurement";
 import { Garment } from "./garments/garment";
 import Sloper from "./components/sloper/index.tsx";
 import GunkCad from "./components/gunk-cad/index.tsx";
+import Homepage from "./components/homepage/index.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Homepage />,
     children: [
       {
         path: "sloper",
