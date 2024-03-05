@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import { FullSloper } from "./measurements/measurement";
 import { Garment } from "./garments/garment";
-import Sloper from "./components/sloper/index.tsx";
+import SloperForm from "./components/sloper/index.tsx";
 import GunkCad from "./components/gunk-cad/index.tsx";
 import Homepage from "./components/homepage/index.tsx";
+import { SavedSloper } from "./measurements/index.ts";
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "sloper",
-        element: <Sloper />,
+        element: <SloperForm />,
       },
       {
         path: "garments/:slug",
@@ -26,8 +26,8 @@ const router = createBrowserRouter([
 ]);
 
 export const SloperContext = React.createContext<{
-  sloper: FullSloper | null;
-  setSloper: (sloper: FullSloper | null) => void;
+  sloper: SavedSloper | null;
+  setSloper: (sloper: SavedSloper | null) => void;
 }>({
   sloper: null,
   setSloper: () => {},
@@ -43,7 +43,7 @@ export const GarmentContext = React.createContext<{
 
 const Main = () => {
   const [garment, setGarment] = React.useState<Garment | null>(null);
-  const [sloper, setSloper] = React.useState<FullSloper | null>(null);
+  const [sloper, setSloper] = React.useState<SavedSloper | null>(null);
   return (
     <SloperContext.Provider value={{ sloper, setSloper }}>
       <GarmentContext.Provider value={{ garment, setGarment }}>

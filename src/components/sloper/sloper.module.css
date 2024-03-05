@@ -31,6 +31,14 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 .content {
   flex-grow: 1;
   display: flex;
@@ -47,15 +55,27 @@
   opacity: 0.7;
 }
 
+.sloperForm .content img {
+  width: 40%;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sloperForm .info {
+  justify-content: space-between;
+}
+
 .info h4 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0 4px 4px 4px;
-  margin-bottom: 12px;
 }
 
 .info p {
   padding: 0 4px;
-  margin-bottom: 12px;
 }
 
 .info button {
@@ -68,4 +88,27 @@
 
 .info button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.interactive {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interactive input {
+  max-width: 40px;
+}
+
+.labeledInput {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 5px;
 }

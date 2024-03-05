@@ -1,10 +1,23 @@
-import { FullSloper } from "./measurement";
+import { Sloper } from "./measurement";
 
-export const emptySloper: FullSloper = {
-  unit: "cm",
-  upperBody: {
+export enum MeasurementCategory {
+  UpperBody = "Upper Body",
+  Arm = "Arm",
+  LowerBody = "Lower Body",
+}
+
+export interface SavedSloper extends Sloper {
+  name?: string;
+  slug?: string;
+}
+
+export const emptySloper: SavedSloper = {
+  unit: "in",
+  measurements: {
+    // Upper Body
     shoulderGirth: {
       name: "Shoulder Girth",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure all the way around the upper arms and body with a tape measure, keeping it parallel to the floor.",
       referenceImage: "ref_1.png",
@@ -12,6 +25,7 @@ export const emptySloper: FullSloper = {
     },
     chestGirth: {
       name: "Chest Girth",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure all the way around the largest circumference of the chest with a tape measure, keeping it parallel to the floor.",
       referenceImage: "ref_2_3_4.png",
@@ -19,6 +33,7 @@ export const emptySloper: FullSloper = {
     },
     abdomenGirth: {
       name: "Abdomen Girth",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure all the way around the largest circumference of the abdomen (usually at the belly button level on a live model) with a tape measure, parallel to the floor.",
       referenceImage: "ref_2_3_4.png",
@@ -26,6 +41,7 @@ export const emptySloper: FullSloper = {
     },
     waistGirth: {
       name: "Waist Girth",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure all the way around the smallest circumference of the torso at the natural waist.",
       referenceImage: "ref_2_3_4.png",
@@ -33,6 +49,7 @@ export const emptySloper: FullSloper = {
     },
     shoulderSeam: {
       name: "Shoulder Seam",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point to the shoulder tip/armhole intersection along the top of the shoulder.",
       referenceImage: "ref_5.png",
@@ -40,6 +57,7 @@ export const emptySloper: FullSloper = {
     },
     halfFrontNeckline: {
       name: "Half Front Neckline",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point around to the pit of the neck.",
       referenceImage: "ref_6.png",
@@ -47,12 +65,14 @@ export const emptySloper: FullSloper = {
     },
     centerFrontNeckToShoulderTip: {
       name: "Center Front Neck to Shoulder Tip",
+      category: MeasurementCategory.UpperBody,
       description: "Measure from the pit of the neck to the shoulder tip.",
       referenceImage: "ref_7_8_9_10_11.png",
       bookId: 7,
     },
     halfFrontToMidArmhole: {
       name: "Half Front to Mid Armhole",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center front to the mid-arm-hole point at the pin.",
       referenceImage: "ref_7_8_9_10_11.png",
@@ -60,6 +80,7 @@ export const emptySloper: FullSloper = {
     },
     halfFrontChest: {
       name: "Half Front Chest",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center front along the chest level to the side seam, parallel to the floor.",
       referenceImage: "ref_7_8_9_10_11.png",
@@ -67,6 +88,7 @@ export const emptySloper: FullSloper = {
     },
     halfFrontAbdomen: {
       name: "Half Front Abdomen",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center front along the abdomen level to the side seam, parallel to the floor.",
       referenceImage: "ref_7_8_9_10_11.png",
@@ -74,6 +96,7 @@ export const emptySloper: FullSloper = {
     },
     halfFrontWaist: {
       name: "Half Front Waist",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center front waist over to the side seam/waist intersection.",
       referenceImage: "ref_7_8_9_10_11.png",
@@ -81,6 +104,7 @@ export const emptySloper: FullSloper = {
     },
     halfBackNeckline: {
       name: "Half Back Neckline",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point around to the center back neck.",
       referenceImage: "ref_12.png",
@@ -88,12 +112,14 @@ export const emptySloper: FullSloper = {
     },
     centerBackNeckToShoulderTip: {
       name: "Center Back Neck to Shoulder Tip",
+      category: MeasurementCategory.UpperBody,
       description: "Measure from the center back neck to the shoulder tip.",
       referenceImage: "ref_13_14_15_16_17.png",
       bookId: 13,
     },
     halfBackToMidArmhole: {
       name: "Half Back to Mid Armhole",
+      category: MeasurementCategory.UpperBody,
       description:
         "The shoulder blade level is found using one fourth of the center back measurement from the neckline to the waistline. Using the one-fourth measurement, measure down from the neck, and mark at center back for the shoulder blade level. Obtain the 'halfway across shoulder blades' measurement by measuring from center back to the edge of the armhole plate or the pin.",
       referenceImage: "ref_13_14_15_16_17.png",
@@ -101,6 +127,7 @@ export const emptySloper: FullSloper = {
     },
     halfBackChest: {
       name: "Half Back Chest",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center back to the side seam along the chest level, parallel to the floor.",
       referenceImage: "ref_13_14_15_16_17.png",
@@ -108,6 +135,7 @@ export const emptySloper: FullSloper = {
     },
     halfBackAbdomen: {
       name: "Half Back Abdomen",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center back along the abdomen level to the side seam, parallel to the floor.",
       referenceImage: "ref_13_14_15_16_17.png",
@@ -115,6 +143,7 @@ export const emptySloper: FullSloper = {
     },
     halfBackWaist: {
       name: "Half Back Waist",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center back waist over to the side seam/waist intersection.",
       referenceImage: "ref_13_14_15_16_17.png",
@@ -122,6 +151,7 @@ export const emptySloper: FullSloper = {
     },
     dartPlacement: {
       name: "Dart Placement",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from center back waist over to the side seam/waist intersection, divide by 2, and add ½ inch.",
       referenceImage: "ref_19_18.png",
@@ -129,6 +159,7 @@ export const emptySloper: FullSloper = {
     },
     sideSeam: {
       name: "Side Seam",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the pin placed 1 inch below the armhole plate down to the side seam/waist intersection.",
       referenceImage: "ref_19_18.png",
@@ -136,6 +167,7 @@ export const emptySloper: FullSloper = {
     },
     highNeckToSideSeamFront: {
       name: "High Neck to Side Seam Front",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point down the front to the underarm/side seam inter-section, which is marked with a pin.",
       referenceImage: "ref_20.png",
@@ -143,6 +175,7 @@ export const emptySloper: FullSloper = {
     },
     highNeckToSideSeamBack: {
       name: "High Neck to Side Seam Back",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point down the back to the underarm/side seam inter-section, which is marked with a pin.",
       referenceImage: "ref_21.png",
@@ -150,6 +183,7 @@ export const emptySloper: FullSloper = {
     },
     centerFront: {
       name: "Center Front",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the pit of the neck down the front to the waist. Do not curve the tape measure in under the abdomen.",
       referenceImage: "ref_23_22.png",
@@ -157,6 +191,7 @@ export const emptySloper: FullSloper = {
     },
     fullFront: {
       name: "Full Front",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point over the chest down to the front waist. Do not curve the tape measure in under the abdomen.",
       referenceImage: "ref_23_22.png",
@@ -164,12 +199,14 @@ export const emptySloper: FullSloper = {
     },
     highNeckToChestFront: {
       name: "High Neck to Chest Front",
+      category: MeasurementCategory.UpperBody,
       description: "Measure from the high neck point to the chest level.",
       referenceImage: "ref_24_25.png",
       bookId: 24,
     },
     shoulderTipToCenterWaistFront: {
       name: "Shoulder Tip to Center Waist Front",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the shoulder tip, over the chest and down to the center front waist. Do not curve the tape measure in under the abdomen.",
       referenceImage: "ref_24_25.png",
@@ -177,12 +214,14 @@ export const emptySloper: FullSloper = {
     },
     centerBack: {
       name: "Center Back",
+      category: MeasurementCategory.UpperBody,
       description: "Measure from the back neck down to the waist.",
       referenceImage: "ref_26_27_28.png",
       bookId: 26,
     },
     fullBack: {
       name: "Full Back",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the high neck point, down the back, and to the waist.",
       referenceImage: "ref_26_27_28.png",
@@ -190,15 +229,17 @@ export const emptySloper: FullSloper = {
     },
     shoulderTipToCenterWaistBack: {
       name: "Shoulder Tip to Center Waist Back",
+      category: MeasurementCategory.UpperBody,
       description:
         "Measure from the shoulder tip, down the back, and to the center back waist.",
       referenceImage: "ref_26_27_28.png",
       bookId: 28,
     },
-  },
-  arm: {
+
+    // Arm
     armLength: {
       name: "Arm Length",
+      category: MeasurementCategory.Arm,
       description:
         "Measure from the shoulder tip down the arm and around the elbow tip to just below the wrist bone while the arm is hanging naturally, slightly bent.",
       referenceImage: "ref_29.png",
@@ -206,6 +247,7 @@ export const emptySloper: FullSloper = {
     },
     underArmLength: {
       name: "Under Arm Length",
+      category: MeasurementCategory.Arm,
       description:
         "Measure from the pin that is 4 inch below the model's underarm to just below the wrist bone while the arm is held straight.",
       referenceImage: "ref_30.png",
@@ -213,6 +255,7 @@ export const emptySloper: FullSloper = {
     },
     forearmLength: {
       name: "Forearm Length",
+      category: MeasurementCategory.Arm,
       description:
         "Measure from just below the wrist bone up to the elbow tip while the arm is bent.",
       referenceImage: "ref_31.png",
@@ -220,6 +263,7 @@ export const emptySloper: FullSloper = {
     },
     bicepGirth: {
       name: "Bicep Girth",
+      category: MeasurementCategory.Arm,
       description:
         "Measure at the largest circumference-high up under the arm while the biceps muscle is flexed, which will enlarge the cir-cumference.",
       referenceImage: "ref_32.png",
@@ -227,6 +271,7 @@ export const emptySloper: FullSloper = {
     },
     elbowGirth: {
       name: "Elbow Girth",
+      category: MeasurementCategory.Arm,
       description:
         "Measure the elbow at the widest part while the arm is bent.",
       referenceImage: "ref_33.png",
@@ -234,20 +279,23 @@ export const emptySloper: FullSloper = {
     },
     wristGirth: {
       name: "Wrist Girth",
+      category: MeasurementCategory.Arm,
       description: "Measure around the wrist joint.",
       referenceImage: "ref_34.png",
       bookId: 34,
     },
     handGirth: {
       name: "Hand Girth",
+      category: MeasurementCategory.Arm,
       description: "Measure around the hand at the largest circumference.",
       referenceImage: "ref_35.png",
       bookId: 35,
     },
-  },
-  lowerBody: {
+
+    // Lower Body
     hipGirth: {
       name: "Hip Girth",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure completely around the largest circumference of the hips and buttocks, keeping the tape measure parallel to the floor.",
       referenceImage: "ref_36_37.png",
@@ -255,6 +303,7 @@ export const emptySloper: FullSloper = {
     },
     hipHeightFront: {
       name: "Hip Height Front",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from center front waist level down to the hip level.",
       referenceImage: "ref_36_37.png",
@@ -262,6 +311,7 @@ export const emptySloper: FullSloper = {
     },
     hipHeightSide: {
       name: "Hip Height Side",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the side/waist down to the hip level along the side seam.",
       referenceImage: "ref_38_39.png",
@@ -269,6 +319,7 @@ export const emptySloper: FullSloper = {
     },
     hipHeightBack: {
       name: "Hip Height Back",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from center back waist level down to the hip level.",
       referenceImage: "ref_38_39.png",
@@ -276,6 +327,7 @@ export const emptySloper: FullSloper = {
     },
     halfFrontHip: {
       name: "Half Front Hip",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from center front over to the side seam at the hip level.",
       referenceImage: "ref_40.png",
@@ -283,6 +335,7 @@ export const emptySloper: FullSloper = {
     },
     halfBackHip: {
       name: "Half Back Hip",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from center back over to the side seam at the hip level.",
       referenceImage: "ref_41.png",
@@ -290,6 +343,7 @@ export const emptySloper: FullSloper = {
     },
     outseamToFloor: {
       name: "Outseam to Floor",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the side/waist along the side seam to the floor. Remember that if you are using a live model, they should not be wearing any shoes.",
       referenceImage: "ref_42_43_44.png",
@@ -297,6 +351,7 @@ export const emptySloper: FullSloper = {
     },
     inseamToFloor: {
       name: "Inseam to Floor",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the center of the crotch straight down to the floor. Again, the live model should not be wearing any shoes.",
       referenceImage: "ref_42_43_44.png",
@@ -304,6 +359,7 @@ export const emptySloper: FullSloper = {
     },
     crotchDepth: {
       name: "Crotch Depth",
+      category: MeasurementCategory.LowerBody,
       description:
         "To determine the crotch depth, find the difference between #42 and #43, which gives you #44. To check this measurement on a live model, have him sit up straight on a flat surface, and measure from the surface (at his crotch level) up to his waist level along his side seam.",
       referenceImage: "ref_42_43_44.png",
@@ -311,6 +367,7 @@ export const emptySloper: FullSloper = {
     },
     outseamToAnkle: {
       name: "Outseam to Ankle",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the side/waist down to just above the ankle bone.",
       referenceImage: "ref_45_46.png",
@@ -318,6 +375,7 @@ export const emptySloper: FullSloper = {
     },
     inseamToAnkle: {
       name: "Inseam to Ankle",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the center of the crotch down the inner leg to just above the ankle bone.",
       referenceImage: "ref_45_46.png",
@@ -325,6 +383,7 @@ export const emptySloper: FullSloper = {
     },
     crotchLength: {
       name: "Crotch Length",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from center front waist down between the legs and up to center back waist. Do not pull tightly between the buttocks.",
       referenceImage: "ref_47.png",
@@ -332,6 +391,7 @@ export const emptySloper: FullSloper = {
     },
     thighGirth: {
       name: "Thigh Girth",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure completely around the largest circumference of the upper thigh.",
       referenceImage: "ref_48_49_50_51_52.png",
@@ -339,6 +399,7 @@ export const emptySloper: FullSloper = {
     },
     calfGirth: {
       name: "Calf Girth",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure completely around the largest circumference of the upper calf.",
       referenceImage: "ref_48_49_50_51_52.png",
@@ -346,6 +407,7 @@ export const emptySloper: FullSloper = {
     },
     waistToKnee: {
       name: "Waist to Knee",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the side/waist down to the middle of the knee.",
       referenceImage: "ref_48_49_50_51_52.png",
@@ -353,6 +415,7 @@ export const emptySloper: FullSloper = {
     },
     kneeToAnkle: {
       name: "Knee to Ankle",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure from the middle of the knee down to just above the ankle bone.",
       referenceImage: "ref_48_49_50_51_52.png",
@@ -360,6 +423,7 @@ export const emptySloper: FullSloper = {
     },
     ankleGirth: {
       name: "Ankle Girth",
+      category: MeasurementCategory.LowerBody,
       description:
         "Measure completely around the smallest circumference of the ankle just above the ankle bone.",
       referenceImage: "ref_48_49_50_51_52.png",
@@ -367,6 +431,7 @@ export const emptySloper: FullSloper = {
     },
     footGirth: {
       name: "Foot Girth",
+      category: MeasurementCategory.LowerBody,
       description:
         "Have the model point his toes so you can measure around the widest part of his heel.",
       referenceImage: "ref_53.png",
