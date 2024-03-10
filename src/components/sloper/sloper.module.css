@@ -112,3 +112,14 @@
   display: flex;
   gap: 5px;
 }
+
+.info .updateHeader {
+  margin-top: 20px;
+}
+
+.storedSlopers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  overflow: scroll;
+}

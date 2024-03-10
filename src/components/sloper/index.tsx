@@ -12,6 +12,7 @@ import { GunkUnits } from "../../garments/garment";
 import classes from "./sloper.module.css";
 import generateTwoWords from "../../util/nameGenerator";
 import clsx from "clsx";
+import { useSloperStorage } from "../../hooks/useSloperStorage";
 
 interface SloperStep {
   name: keyof Measurements;
@@ -31,6 +32,7 @@ const createNewSloper = () => {
 
 const Sloper: React.FC = () => {
   const { sloper, setSloper } = useContext(SloperContext);
+  const { storedSlopers, updateOrAddSloper } = useSloperStorage();
   const [currentStep, setCurrentStep] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,13 +40,26 @@ const Sloper: React.FC = () => {
     if (!sloper) return;
     const name = steps[currentStep].name;
     const measurement = steps[currentStep].measurement;
-    setSloper({
+    const updatedSloper = {
       ...sloper,
       measurements: {
         ...sloper.measurements,
         [name]: { ...measurement, value },
       },
-    });
+    };
+    setSloper(updatedSloper);
+
+    updateOrAddSloper(updatedSloper);
+  };
+
+  const updateSloperName = (name: string) => {
+    if (!sloper) return;
+    const updatedSloper = {
+      ...sloper,
+      name,
+    };
+    setSloper(updatedSloper);
+    updateOrAddSloper(updatedSloper);
   };
 
   return (
@@ -54,7 +69,9 @@ const Sloper: React.FC = () => {
           <h3>Sloper</h3>
         </div>
         <div className={classes.content}>
-          {!sloper && <SloperIntro setSloper={setSloper} />}
+          {!sloper && (
+            <SloperIntro setSloper={setSloper} storedSlopers={storedSlopers} />
+          )}
           {sloper && (
             <>
               <img
@@ -77,7 +94,9 @@ const Sloper: React.FC = () => {
                     <input
                       ref={inputRef}
                       type="number"
-                      value={sloper.measurements[steps[currentStep].name].value}
+                      value={
+                        sloper.measurements[steps[currentStep].name].value || 0
+                      }
                       onChange={(e) => {
                         updateSloperMeasurement(Number(e.target.value));
                       }}
@@ -122,14 +141,13 @@ const Sloper: React.FC = () => {
                 type="text"
                 value={sloper.name}
                 onChange={(e) => {
-                  setSloper({ ...sloper, name: e.target.value });
+                  updateSloperName(e.target.value);
                 }}
               />
             </div>
             <div className={classes.labeledInput}>
               <label>Unit</label>
               <select
-                defaultValue="in"
                 onChange={(e) => {
                   setSloper({ ...sloper, unit: e.target.value as GunkUnits });
                 }}
@@ -149,13 +167,15 @@ const Sloper: React.FC = () => {
 
 const SloperIntro = ({
   setSloper,
+  storedSlopers,
 }: {
   setSloper: (sloper: SavedSloper) => void;
+  storedSlopers: SavedSloper[];
 }) => (
   <>
     <img alt="A robo croqui" src="/public/croqui.png" />
     <div className={classes.info}>
-      <h4>Create a new Sloper</h4>
+      <h4>Create a new sloper</h4>
       <p>
         A sloper is the basic building block of a pattern. Based off the
         measurements of a specific person, it is used to make a custom garment.
@@ -167,6 +187,18 @@ const SloperIntro = ({
       <button onClick={() => setSloper(createNewSloper())}>
         Create a sloper
       </button>
+      {storedSlopers.length > 0 && (
+        <>
+          <h4 className={classes.updateHeader}>Update an existing sloper</h4>
+          <ul className={classes.storedSlopers}>
+            {storedSlopers.map((sloper) => (
+              <li key={sloper.slug}>
+                <button onClick={() => setSloper(sloper)}>{sloper.name}</button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   </>
 );

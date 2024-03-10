@@ -40,7 +40,7 @@ const Homepage = () => {
                 <div className={classes.linkContent}>
                   <p>Set measurements for use with Gunk patterns.</p>
                   <Link to="/sloper" className={classes.garmentLink}>
-                    Create Sloper
+                    View Slopers
                   </Link>
                 </div>
               </div>
