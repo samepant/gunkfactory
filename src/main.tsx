@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import { Garment } from "./garments/garment";
 import SloperForm from "./components/sloper/index.tsx";
@@ -8,7 +8,7 @@ import GunkCad from "./components/gunk-cad/index.tsx";
 import Homepage from "./components/homepage/index.tsx";
 import { SavedSloper } from "./measurements/index.ts";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Homepage />,
