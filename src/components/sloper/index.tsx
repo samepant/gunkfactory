@@ -75,7 +75,7 @@ const Sloper: React.FC = () => {
           {sloper && (
             <>
               <img
-                src={`public/references/${steps[currentStep].measurement.referenceImage}`}
+                src={`/references/${steps[currentStep].measurement.referenceImage}`}
               />
               <div className={classes.info}>
                 <div className={classes.info}>
@@ -173,7 +173,7 @@ const SloperIntro = ({
   storedSlopers: SavedSloper[];
 }) => (
   <>
-    <img alt="A robo croqui" src="/public/croqui.png" />
+    <img alt="A robo croqui" src="/croqui.png" />
     <div className={classes.info}>
       <h4>Create a new sloper</h4>
       <p>
