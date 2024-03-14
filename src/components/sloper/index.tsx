@@ -68,12 +68,14 @@ const Sloper: React.FC = () => {
         <div className={classes.header}>
           <h3>Sloper</h3>
         </div>
-        <div className={classes.content}>
-          {!sloper && (
+        {!sloper && (
+          <div className={classes.content}>
             <SloperIntro setSloper={setSloper} storedSlopers={storedSlopers} />
-          )}
-          {sloper && (
-            <>
+          </div>
+        )}
+        {sloper && (
+          <div className={classes.activeLayout}>
+            <div className={classes.content}>
               <img
                 src={`/references/${steps[currentStep].measurement.referenceImage}`}
               />
@@ -130,9 +132,103 @@ const Sloper: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </>
-          )}
-        </div>
+            </div>
+
+            <div className={classes.measurementTable}>
+              <h4>Upper Body</h4>
+              <ul>
+                {Object.keys(sloper.measurements)
+                  .filter((name) => {
+                    const measurement =
+                      sloper.measurements[name as keyof Measurements];
+                    return (
+                      measurement.category === MeasurementCategory.UpperBody
+                    );
+                  })
+                  .map((name) => (
+                    <li
+                      key={name}
+                      className={clsx(
+                        classes.tableItem,
+                        steps[currentStep].name === name &&
+                          classes.activeTableItem,
+                        sloper.measurements[name as keyof Measurements].value &&
+                          classes.complete
+                      )}
+                      onClick={() => {
+                        setCurrentStep(
+                          steps.findIndex((step) => step.name === name)
+                        );
+                        inputRef.current?.focus();
+                      }}
+                    >
+                      <span>{formatCamelCaseWithSpaces(name)}</span>
+                    </li>
+                  ))}
+              </ul>
+              <h4>Arm</h4>
+              <ul>
+                {Object.keys(sloper.measurements)
+                  .filter((name) => {
+                    const measurement =
+                      sloper.measurements[name as keyof Measurements];
+                    return measurement.category === MeasurementCategory.Arm;
+                  })
+                  .map((name) => (
+                    <li
+                      key={name}
+                      className={clsx(
+                        classes.tableItem,
+                        steps[currentStep].name === name &&
+                          classes.activeTableItem,
+                        sloper.measurements[name as keyof Measurements].value &&
+                          classes.complete
+                      )}
+                      onClick={() => {
+                        setCurrentStep(
+                          steps.findIndex((step) => step.name === name)
+                        );
+                        inputRef.current?.focus();
+                      }}
+                    >
+                      <span>{formatCamelCaseWithSpaces(name)}</span>
+                    </li>
+                  ))}
+              </ul>
+              <h4>Lower Body</h4>
+              <ul>
+                {Object.keys(sloper.measurements)
+                  .filter((name) => {
+                    const measurement =
+                      sloper.measurements[name as keyof Measurements];
+                    return (
+                      measurement.category === MeasurementCategory.LowerBody
+                    );
+                  })
+                  .map((name) => (
+                    <li
+                      key={name}
+                      className={clsx(
+                        classes.tableItem,
+                        steps[currentStep].name === name &&
+                          classes.activeTableItem,
+                        sloper.measurements[name as keyof Measurements].value &&
+                          classes.complete
+                      )}
+                      onClick={() => {
+                        setCurrentStep(
+                          steps.findIndex((step) => step.name === name)
+                        );
+                        inputRef.current?.focus();
+                      }}
+                    >
+                      <span>{formatCamelCaseWithSpaces(name)}</span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </div>
+        )}
         {sloper && (
           <div className={classes.footer}>
             <div className={classes.labeledInput}>

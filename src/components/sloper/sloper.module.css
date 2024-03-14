@@ -15,7 +15,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 
   box-sizing: border-box;
-  max-width: 600px;
+  max-width: 700px;
   max-height: 400px;
   height: 100%;
   width: 100%;
@@ -122,4 +122,56 @@
   flex-wrap: wrap;
   gap: 7px;
   overflow: scroll;
+}
+
+.activeLayout {
+  display: flex;
+  overflow: hidden;
+}
+
+.activeLayout .content {
+  width: 80%;
+}
+
+.measurementTable {
+  width: 20%;
+  overflow-y: scroll;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 6px 0;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.measurementTable h4 {
+  padding: 0 4px 2px 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.measurementTable h4:not(:first-child) {
+  margin-top: 10px;
+}
+
+.tableItem {
+  cursor: pointer;
+  padding: 0 0 0 15px;
+  position: relative;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tableItem:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tableItem.activeTableItem {
+  background: rgba(255, 255, 255, 0.1);
+}
+.tableItem.complete::before {
+  content: "✓";
+  color: green;
+  position: absolute;
+  left: 2px;
+  top: 0;
 }
