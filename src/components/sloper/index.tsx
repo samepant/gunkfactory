@@ -62,6 +62,18 @@ const Sloper: React.FC = () => {
     updateOrAddSloper(updatedSloper);
   };
 
+  const handleDownload = () => {
+    if (!sloper) return;
+    const blob = new Blob([JSON.stringify(sloper)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${sloper.name}.json`;
+    a.click();
+  };
+
   return (
     <div className={clsx(classes.container, sloper && classes.sloperForm)}>
       <div className={classes.modal}>
@@ -241,6 +253,7 @@ const Sloper: React.FC = () => {
                 }}
               />
             </div>
+            <button onClick={handleDownload}>Download Sloper</button>
             <div className={classes.labeledInput}>
               <label>Unit</label>
               <select
