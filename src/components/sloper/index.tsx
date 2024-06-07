@@ -74,6 +74,24 @@ const Sloper: React.FC = () => {
     a.click();
   };
 
+  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (!e.target?.result) return;
+      const sloper = JSON.parse(e.target.result as string) as SavedSloper;
+      // validate sloper
+      if (!sloper.slug || !sloper.name || !sloper.measurements) {
+        alert("Invalid sloper file");
+        return;
+      }
+      updateOrAddSloper(sloper);
+      setSloper(sloper);
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className={clsx(classes.container, sloper && classes.sloperForm)}>
       <div className={classes.modal}>
@@ -82,7 +100,11 @@ const Sloper: React.FC = () => {
         </div>
         {!sloper && (
           <div className={classes.content}>
-            <SloperIntro setSloper={setSloper} storedSlopers={storedSlopers} />
+            <SloperIntro
+              setSloper={setSloper}
+              storedSlopers={storedSlopers}
+              handleImport={handleImport}
+            />
           </div>
         )}
         {sloper && (
@@ -277,9 +299,11 @@ const Sloper: React.FC = () => {
 const SloperIntro = ({
   setSloper,
   storedSlopers,
+  handleImport,
 }: {
   setSloper: (sloper: SavedSloper) => void;
   storedSlopers: SavedSloper[];
+  handleImport: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => (
   <>
     <img alt="A robo croqui" src="/croqui.png" />
@@ -296,6 +320,10 @@ const SloperIntro = ({
       <button onClick={() => setSloper(createNewSloper())}>
         Create a sloper
       </button>
+      <label className="button">
+        <input type="file" onChange={handleImport} accept="application/json" />
+        Import a sloper
+      </label>
       {storedSlopers.length > 0 && (
         <>
           <h4 className={classes.updateHeader}>Update an existing sloper</h4>

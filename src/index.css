@@ -56,16 +56,19 @@ ul {
   margin: 0;
 }
 
-button {
+button,
+.button {
   border: none;
   background: rgba(255, 255, 255, 0.1);
   color: white;
   cursor: pointer;
   padding: 4px 8px;
   margin: 0;
+  text-align: center;
 }
 
-button:hover {
+button:hover,
+.button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -93,4 +96,8 @@ input::-webkit-inner-spin-button {
 
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+input[type="file"] {
+  display: none;
 }
