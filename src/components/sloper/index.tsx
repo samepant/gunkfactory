@@ -1,12 +1,18 @@
 import {
   emptySloper,
+  fromSloperFile,
   MeasurementCategory,
   SavedSloper,
+  toSloperFile,
 } from "../../measurements";
 import { createId } from "@paralleldrive/cuid2";
 import { useContext, useRef, useState } from "react";
 import { SloperContext } from "../../main";
-import { Measurement, Measurements } from "../../measurements/measurement";
+import {
+  Measurement,
+  Measurements,
+  SloperFile,
+} from "../../measurements/measurement";
 import { formatCamelCaseWithSpaces } from "../../util/formatting";
 import { GunkUnits } from "../../garments/garment";
 import classes from "./sloper.module.css";
@@ -64,7 +70,7 @@ const Sloper: React.FC = () => {
 
   const handleDownload = () => {
     if (!sloper) return;
-    const blob = new Blob([JSON.stringify(sloper)], {
+    const blob = new Blob([JSON.stringify(toSloperFile(sloper), null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
@@ -80,12 +86,20 @@ const Sloper: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       if (!e.target?.result) return;
-      const sloper = JSON.parse(e.target.result as string) as SavedSloper;
+      const parsed = JSON.parse(e.target.result as string);
       // validate sloper
-      if (!sloper.slug || !sloper.name || !sloper.measurements) {
+      if (!parsed.name || !parsed.measurements) {
         alert("Invalid sloper file");
         return;
       }
+      // older exports stored whole measurement objects instead of numbers
+      const isLegacy = Object.values(parsed.measurements).some(
+        (m) => typeof m === "object"
+      );
+      const sloper: SavedSloper = isLegacy
+        ? parsed
+        : fromSloperFile(parsed as SloperFile);
+      sloper.slug = sloper.slug || createId();
       updateOrAddSloper(sloper);
       setSloper(sloper);
     };
@@ -280,7 +294,12 @@ const Sloper: React.FC = () => {
               <label>Unit</label>
               <select
                 onChange={(e) => {
-                  setSloper({ ...sloper, unit: e.target.value as GunkUnits });
+                  const updatedSloper = {
+                    ...sloper,
+                    unit: e.target.value as GunkUnits,
+                  };
+                  setSloper(updatedSloper);
+                  updateOrAddSloper(updatedSloper);
                 }}
                 value={sloper.unit}
               >

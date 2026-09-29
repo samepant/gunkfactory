@@ -1,0 +1,123 @@
+.canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+  touch-action: none;
+}
+
+.canvas path,
+.canvas rect {
+  vector-effect: non-scaling-stroke;
+}
+
+.gridMinor {
+  fill: none;
+  stroke: rgba(186, 217, 55, 0.12);
+  stroke-width: 1;
+}
+
+.gridMajor {
+  fill: none;
+  stroke: rgba(186, 217, 55, 0.35);
+  stroke-width: 1;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 36px;
+  z-index: 5;
+  width: 280px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(2px);
+  background-color: rgba(36, 0, 31, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.section select {
+  margin: 0 5px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.check,
+.param {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 5px;
+}
+
+.param input,
+.param select {
+  width: 70px;
+  margin: 0;
+}
+
+.warn {
+  color: rgb(255, 170, 60);
+}
+
+.error {
+  padding: 5px;
+  color: rgb(255, 120, 120);
+}
+
+.instructions {
+  padding: 0 5px;
+  white-space: pre-wrap;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.fabric {
+  fill: rgba(186, 217, 55, 0.05);
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 1;
+  stroke-dasharray: 8 4;
+}
+
+.fabricLabel {
+  fill: rgba(255, 255, 255, 0.85);
+  font-size: 3px;
+  user-select: none;
+}
+
+.modes {
+  display: flex;
+  gap: 4px;
+  padding: 0 5px;
+}
+
+.modes button {
+  flex: 1;
+}
+
+.modes button.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.param input[type="checkbox"] {
+  width: auto;
+}

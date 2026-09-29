@@ -1,4 +1,5 @@
-import { Sloper } from "./measurement";
+import { GunkUnits } from "../garments/garment";
+import { Measurements, Sloper, SloperFile } from "./measurement";
 
 export enum MeasurementCategory {
   UpperBody = "Upper Body",
@@ -439,3 +440,44 @@ export const emptySloper: SavedSloper = {
     },
   },
 };
+
+export const toSloperFile = (sloper: SavedSloper): SloperFile => ({
+  name: sloper.name ?? "",
+  slug: sloper.slug,
+  unit: sloper.unit,
+  measurements: Object.fromEntries(
+    Object.entries(sloper.measurements)
+      .filter(([, m]) => m.value !== undefined)
+      .map(([key, m]) => [key, m.value])
+  ),
+});
+
+export const fromSloperFile = (file: SloperFile): SavedSloper => {
+  const measurements = { ...emptySloper.measurements };
+  for (const [key, value] of Object.entries(file.measurements)) {
+    const name = key as keyof Measurements;
+    if (measurements[name]) measurements[name] = { ...measurements[name], value };
+  }
+  return { name: file.name, slug: file.slug, unit: file.unit, measurements };
+};
+
+const cmPer: Record<GunkUnits, number> = { cm: 1, mm: 0.1, in: 2.54 };
+
+export const toCm = (value: number, unit: GunkUnits) => value * cmPer[unit];
+export const fromCm = (cm: number, unit: GunkUnits) => cm / cmPer[unit];
+
+export const measurementsInCm = (file: SloperFile) =>
+  Object.fromEntries(
+    Object.entries(file.measurements).map(([key, value]) => [
+      key,
+      toCm(value, file.unit),
+    ])
+  ) as Partial<Record<keyof Measurements, number>>;
+
+// slopers kept as files in /slopers (gitignored except the example)
+export const fileSlopers: SloperFile[] = Object.values(
+  import.meta.glob<SloperFile>("../../slopers/*.json", {
+    eager: true,
+    import: "default",
+  })
+);

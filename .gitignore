@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# personal measurements
+slopers/*.json
+!slopers/example.json

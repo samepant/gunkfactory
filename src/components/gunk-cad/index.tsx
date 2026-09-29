@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { GarmentContext } from "../../main";
-import Renderer from "../renderer";
+import PatternView from "../pattern-view";
 
 const GunkCad = () => {
   const { garment } = useContext(GarmentContext);
 
   if (garment) {
-    return <Renderer solids={garment.components} />;
+    return <PatternView key={garment.slug} garment={garment} />;
   }
 
   return null;

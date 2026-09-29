@@ -75,3 +75,11 @@ export type Measurements = {
   ankleGirth: Measurement;
   footGirth: Measurement;
 };
+
+// on-disk format for slopers/*.json: just the numbers, easy to edit by hand
+export type SloperFile = {
+  name: string;
+  slug?: string;
+  unit: GunkUnits;
+  measurements: Partial<Record<keyof Measurements, number>>;
+};

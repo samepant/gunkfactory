@@ -1,0 +1,119 @@
+.cut,
+.seam,
+.fold,
+.grain,
+.grainHead,
+.notch,
+.mark {
+  vector-effect: non-scaling-stroke;
+}
+
+.cut {
+  fill: rgba(255, 255, 255, 0.04);
+  stroke: rgb(186, 217, 55);
+  stroke-width: 1.5;
+}
+
+.seam {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 1;
+  stroke-dasharray: 6 4;
+}
+
+.fold {
+  fill: none;
+  stroke: rgb(255, 170, 60);
+  stroke-width: 2;
+  stroke-dasharray: 12 4 2 4;
+}
+
+.grain {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+  stroke-width: 1;
+}
+
+.grainHead {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.8);
+}
+
+.notch {
+  stroke: rgb(255, 90, 120);
+  stroke-width: 2;
+}
+
+.mark {
+  fill: none;
+  stroke: rgb(120, 200, 255);
+  stroke-width: 1.5;
+}
+
+.dashed {
+  stroke-dasharray: 4 3;
+}
+
+.label,
+.cutLabel {
+  fill: rgba(255, 255, 255, 0.85);
+  text-anchor: middle;
+  font-family: inherit;
+  user-select: none;
+}
+
+.label {
+  font-size: 1.6px;
+}
+
+.cutLabel {
+  font-size: 1.1px;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.projection .cut,
+.projection .seam,
+.projection .fold,
+.projection .grain,
+.projection .grainHead,
+.projection .notch,
+.projection .mark {
+  vector-effect: none;
+  stroke: var(--line-color);
+  opacity: 1;
+}
+
+.projection .cut {
+  fill: none;
+  stroke-width: var(--line-width);
+}
+
+.projection .seam {
+  stroke-width: calc(var(--line-width) / 2);
+  stroke-dasharray: 0.6 0.4;
+  opacity: 0.6;
+}
+
+.projection .fold {
+  stroke-width: var(--line-width);
+  stroke-dasharray: 2 0.5 0.3 0.5;
+}
+
+.projection .grain,
+.projection .grainHead,
+.projection .mark {
+  stroke-width: calc(var(--line-width) / 2);
+}
+
+.projection .notch {
+  stroke-width: var(--line-width);
+}
+
+.projection .dashed {
+  stroke-dasharray: 0.5 0.3;
+}
+
+.projection .label,
+.projection .cutLabel {
+  fill: var(--line-color);
+}

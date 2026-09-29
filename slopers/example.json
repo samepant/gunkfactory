@@ -1,0 +1,25 @@
+{
+  "name": "example",
+  "slug": "example",
+  "unit": "cm",
+  "measurements": {
+    "centerBack": 45,
+    "centerFront": 38,
+    "halfBackNeckline": 8,
+    "halfFrontNeckline": 11.5,
+    "shoulderSeam": 15,
+    "shoulderTipToCenterWaistBack": 47,
+    "shoulderTipToCenterWaistFront": 46,
+    "halfBackChest": 24.5,
+    "halfFrontChest": 25.5,
+    "halfBackToMidArmhole": 19,
+    "halfFrontToMidArmhole": 18,
+    "sideSeam": 21,
+    "abdomenGirth": 92,
+    "hipGirth": 100,
+    "armLength": 64,
+    "bicepGirth": 32,
+    "wristGirth": 17.5,
+    "handGirth": 25
+  }
+}
