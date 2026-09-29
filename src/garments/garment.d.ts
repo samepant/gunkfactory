@@ -1,18 +1,27 @@
-import { Geom2, Geom3 } from "@jscad/modeling/src/geometries/types";
+import type { Measurements } from "../measurements/measurement";
+import type { DraftResult } from "../pattern/pattern";
 
 export type GunkUnits = "cm" | "mm" | "in";
+
+export type MeasurementsCm = Record<keyof Measurements, number>;
+
+export type GarmentParams = Record<string, number | string>;
 
 export interface Garment {
   name: string;
   slug: string;
-  components: Geom3[] | Geom2[];
   version: string;
   params: GarmentParamDescriptor[];
-  unit: GunkUnits;
+  requiredMeasurements: (keyof Measurements)[];
+  instructions: string; // plain-text sewing guide, shown alongside the pattern
+  draft: (measurements: MeasurementsCm, params: GarmentParams) => DraftResult;
 }
 
 export interface GarmentParamDescriptor {
   name: string;
   slug: string;
-  type: "number" | "string";
+  // "length" params are stored in cm and shown in the sloper's unit
+  type: "length" | "number" | "select";
+  default: number | string;
+  options?: string[];
 }
