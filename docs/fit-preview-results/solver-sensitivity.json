@@ -1,0 +1,162 @@
+[
+  {
+    "name": "solver-120-10",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.008333333333333333,
+        "iterations": 10
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 4908.953584,
+    "steps": 360,
+    "seamGap": 0.3900318909812699,
+    "meanStrain": 0.025372224370988905,
+    "maxStrain": 0.4813187146382598,
+    "maxStretch": 0.4813187146382598,
+    "maxCompression": 0.26112935798368964,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 13.916666999999507,
+    "motion": 0.001574317472654099,
+    "speed": 0.18891809671849188
+  },
+  {
+    "name": "solver-240-10",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.004166666666666667,
+        "iterations": 10
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 9728.356167,
+    "steps": 720,
+    "seamGap": 0.15417073291011502,
+    "meanStrain": 0.010587156869823094,
+    "maxStrain": 0.25828499598118304,
+    "maxStretch": 0.25828499598118304,
+    "maxCompression": 0.09839312785956578,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 13.464625000000524,
+    "motion": 0.0001798201094118103,
+    "speed": 0.04315682625883448
+  },
+  {
+    "name": "solver-240-20",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.004166666666666667,
+        "iterations": 20
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 19551.635541,
+    "steps": 720,
+    "seamGap": 0.1767421998519839,
+    "meanStrain": 0.008514945858401388,
+    "maxStrain": 0.21522371245594174,
+    "maxStretch": 0.21522371245594174,
+    "maxCompression": 0.07938683856127249,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 26.691208000000188,
+    "motion": 0.00013154387340287996,
+    "speed": 0.03157052961669119
+  },
+  {
+    "name": "solver-360-5",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.002777777777777778,
+        "iterations": 5
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 8314.982958,
+    "steps": 1080,
+    "seamGap": 0.1217326417351697,
+    "meanStrain": 0.009809324233513795,
+    "maxStrain": 0.25339464539593703,
+    "maxStretch": 0.25339464539593703,
+    "maxCompression": 0.09487448760127282,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 7.617333999998664,
+    "motion": 0.00014637345918577547,
+    "speed": 0.05269444530687917
+  },
+  {
+    "name": "solver-480-3",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 7279.82875,
+    "steps": 1440,
+    "seamGap": 0.10938898211055499,
+    "meanStrain": 0.00958659721515755,
+    "maxStrain": 0.24869791480953718,
+    "maxStretch": 0.24869791480953718,
+    "maxCompression": 0.08584899163478366,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 4.836124999999811,
+    "motion": 0.00012028196512814211,
+    "speed": 0.05773534326150821
+  }
+]

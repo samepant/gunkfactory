@@ -1,0 +1,85 @@
+.root { position: fixed; inset: 0 0 36px; color: #20382f; background: #f5f5ef; display: flex; flex-direction: column; font-size: 12px; }
+.header { height: 83px; flex-shrink: 0; padding: 16px 26px; display: flex; align-items: center; justify-content: space-between; background: #172d25; color: #f2f3df; }
+.eyebrow { font-size: 9px; letter-spacing: 1.8px; font-weight: 600; opacity: .66; }
+.header h1 { font-size: 28px; letter-spacing: -1px; line-height: 1.2; margin-top: 4px; }
+.header h1 span { font-family: Georgia, serif; font-style: italic; font-weight: 400; color: #bccbad; margin-left: 6px; }
+.headerRight { display: flex; align-items: center; gap: 23px; }
+.headerRight a { color: #dde6d0; text-decoration: none; font-size: 11px; }
+.badge { font-size: 8px; letter-spacing: 1.4px; border: 1px solid #849277; padding: 5px 8px; border-radius: 2px; }
+.workspace { flex: 1; display: grid; grid-template-columns: 280px minmax(260px, 1fr) 245px; min-height: 0; }
+.sidebar { border-right: 1px solid #d6dccf; display: flex; flex-direction: column; min-height: 0; }
+.intro { padding: 22px 22px 18px; }
+.intro p { font-family: Georgia, serif; font-size: 21px; margin: 8px 0 6px; }
+.root small { color: #7c897d; font-size: 10px; line-height: 1.65; display: block; }
+.tabs { display: flex; padding: 0 18px; gap: 10px; border-bottom: 1px solid #d6dccf; }
+.tabs button { color: #85917f; padding: 10px 5px; background: transparent; text-transform: capitalize; border-bottom: 2px solid transparent; font-size: 11px; }
+.tabs .activeTab { color: #294939; border-bottom-color: #294939; }
+.controls { overflow: auto; padding: 20px 22px 30px; }
+.field { display: block; font-size: 10px; color: #677966; margin-bottom: 18px; }
+.root select, .root input[type=number] { color-scheme: light; color: #294034; border: 1px solid #ced6c7; background: #fdfdf7; border-radius: 3px; padding: 8px; width: 100%; font-family: inherit; font-size: 11px; margin-top: 5px; }
+.root select:focus, .root input:focus { outline: 2px solid #719c7d; outline-offset: 2px; }
+.sectionTitle { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 19px 0 14px; display: flex; justify-content: space-between; border-top: 1px solid #dce1d5; margin-top: 20px; font-weight: 600; }
+.sectionTitle span { color: #99a28f; font-weight: 400; text-transform: none; letter-spacing: 0; }
+.slider { display: block; margin: 0 0 20px; }
+.slider > span { display: flex; justify-content: space-between; font-size: 11px; }
+.slider output { font-variant-numeric: tabular-nums; background: #e7ebdd; padding: 0 5px; border-radius: 2px; min-width: 28px; text-align: center; }
+.slider input { accent-color: #456a50; width: 100%; height: 3px; display: block; margin-top: 13px; cursor: pointer; border: 0; padding: 0; }
+.check { display: flex; align-items: center; gap: 9px; font-size: 11px; margin: 13px 0; cursor: pointer; }
+.check input { accent-color: #385f43; width: 12px; height: 12px; }
+.note { background: #e9eddf; border-left: 2px solid #aebd95; padding: 12px; margin-top: 19px; font-size: 10px; line-height: 1.65; color: #63775d; }
+.note strong { color: #30472e; font-weight: 600; }
+.note p { margin-top: 6px; }
+.root button { border-radius: 3px; }
+.root button:focus-visible, .root a:focus-visible, .pattern g:focus-visible { outline: 2px solid #78916d; outline-offset: 3px; }
+.root button:disabled { opacity: .35; cursor: not-allowed; }
+.textButton { background: transparent; color: #7b8972; padding: 13px 0; text-decoration: underline; font-size: 10px; }
+.textButton:hover { background: transparent; color: #244f37; }
+.stage { position: relative; overflow: hidden; background: #e1e4dc; min-height: 250px; }
+.stageTitle { position: absolute; top: 24px; left: 27px; pointer-events: none; }
+.stageTitle p { font-size: 13px; margin: 7px 0 3px; }
+.stageTitle small { font-size: 10px; }
+.cameraBar { position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%); display: flex; border: 1px solid #bfc8b6; border-radius: 4px; background: #f7f8eecc; padding: 3px; }
+.cameraBar button { background: transparent; color: #52674b; padding: 7px 13px; font-size: 10px; text-transform: capitalize; }
+.cameraBar button:hover { background: #dce3d2; }
+.stageHint { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; font-size: 8px; letter-spacing: 1.05px; color: #8b9982; pointer-events: none; }
+.inspector { border-left: 1px solid #d6dccf; padding: 23px 20px; overflow: auto; }
+.inspector h2 { font: 24px Georgia, serif; margin: 10px 0; }
+.description { color: #819077; font-size: 11px; margin-bottom: 21px; line-height: 1.6; }
+.primary { color: #f7f8eb; background: #31543b; width: 100%; padding: 12px; font-size: 11px; }
+.primary:hover { background: #466950; }
+.secondary { color: #4a6541; background: transparent; border: 1px solid #cbd5bf; width: 100%; padding: 9px; margin-top: 8px; font-size: 10px; }
+.secondary:hover { background: #e9eedf; }
+.metric { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 11px 0; font-size: 10px; color: #8c9781; }
+.metric b { font-weight: 500; font-variant-numeric: tabular-nums; color: #334c2c; white-space: nowrap; }
+.footnote { font-size: 9px; color: #9aa58e; line-height: 1.7; margin-top: 24px; }
+.footnote a { color: inherit; }
+.measurement { display: flex; justify-content: space-between; font-size: 11px; padding: 8px 0; border-bottom: 1px solid #e0e6d7; }
+.measurement b { font-weight: 500; }
+.measurement small { font-size: 8px; text-transform: uppercase; letter-spacing: .5px; }
+.pattern { width: 100%; height: 200px; background: #edf1e7; border: 1px solid #d7e0cd; margin-top: 15px; border-radius: 3px; }
+.pattern g { cursor: pointer; }
+.offsets { display: flex; gap: 6px; margin-top: 12px; font-size: 9px; color: #73856b; }
+.offsets label { width: 33.3%; }
+.root .offsets input { padding: 5px; }
+.seamList { max-height: 230px; overflow: auto; margin-bottom: 12px; }
+.seamList button { color: #677e5d; width: 100%; display: flex; gap: 8px; align-items: center; background: transparent; text-align: left; padding: 6px; font-size: 10px; }
+.seamList button:hover, .seamList .selectedSeam { background: #e1e9d7; }
+.dot, .offDot { border-radius: 50%; width: 5px; height: 5px; background: #779164; flex-shrink: 0; }
+.offDot { background: #c7cfbe; }
+.buttonGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 20px; }
+.buttonGrid button { color: #526c48; background: #e5ecdd; font-size: 10px; padding: 8px; }
+.json { display: block; width: 100%; height: 140px; margin-top: 8px; color: #3a5739; background: #edf2e7; border: 1px solid #cdd8c4; font-size: 9px; font-family: monospace; resize: vertical; }
+.message { color: #657a50; padding: 15px 0; font-size: 11px; }
+.contact { display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #7c8267; gap: 6px; border-bottom: 1px solid #dce3d1; padding: 6px 0; }
+.contact button { color: #9b693b; background: #ede7d9; padding: 2px 7px; }
+.error { position: absolute; top: 38%; left: 10%; right: 10%; padding: 22px; border: 1px solid #cfbaa4; background: #f5eee3; color: #714e34; line-height: 1.6; }
+.error button { background: #8c6b51; color: white; margin-top: 14px; }
+.error p { margin-top: 8px; }
+.legend { font-size: 9px; color: #798d6e; }
+.legend > div { height: 6px; background: linear-gradient(90deg, #789487, #c65d39); border-radius: 3px; margin: 12px 0 5px; }
+.legend span { display: flex; justify-content: space-between; }
+.legend b { font-weight: 400; }
+.unsupported { position: fixed; inset: 50px; padding: 30px; background: #172d25; line-height: 2; }
+.unsupported a { color: #c8d8b6; }
+@media (max-width: 1100px) { .workspace { grid-template-columns: 250px minmax(260px, 1fr) 210px; } .controls { padding: 16px; } .inspector { padding: 22px 15px; } }
+@media (max-width: 850px) { .workspace { grid-template-columns: 220px minmax(260px, 1fr); } .inspector { position: absolute; top: 100px; right: 12px; width: 150px; max-height: 180px; background: #f5f5efe8; border: 1px solid #cbd6be; border-radius: 5px; padding: 10px; } .inspector > :not(.primary):not(.secondary) { display: none; } .headerRight { gap: 8px; } .stageTitle { left: 16px; top: 18px; } }

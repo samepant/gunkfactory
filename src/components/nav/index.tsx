@@ -7,7 +7,7 @@ import garments from "../../garments";
 import { useContext, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { GarmentContext } from "../../main";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const Nav = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,6 +76,7 @@ const Nav = () => {
             </>
           )}
         </div>
+        {slug && !location.pathname.startsWith("/fit/") && <Link style={{ color: "#d4dfc5", marginLeft: "auto", padding: "0 16px", fontSize: 11 }} to={`/fit/${slug}`}>Fit preview ↗</Link>}
         <button
           className={classes.menuButton}
           onClick={() => setMenuOpen(!menuOpen)}

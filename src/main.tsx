@@ -8,6 +8,8 @@ import GunkCad from "./components/gunk-cad/index.tsx";
 import Homepage from "./components/homepage/index.tsx";
 import { SavedSloper } from "./measurements/index.ts";
 
+const FitPreview = React.lazy(() => import("./fit-preview"));
+
 const router = createHashRouter([
   {
     path: "/",
@@ -20,6 +22,11 @@ const router = createHashRouter([
       {
         path: "garments/:slug",
         element: <GunkCad />,
+      },
+      {
+        path: "fit/:slug",
+        element: <React.Suspense fallback={<div style={{ padding: 30 }}>Loading fit preview…</div>}><FitPreview /></React.Suspense>,
+        errorElement: <div role="alert" style={{ padding: 30 }}>The experimental preview could not load. <a style={{ color: "inherit" }} href="#/">Return to garments</a> and try again.</div>,
       },
     ],
   },

@@ -1,0 +1,290 @@
+[
+  {
+    "name": "default-current",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 7416.235833000001,
+    "steps": 1440,
+    "seamGap": 0.10938898211055499,
+    "meanStrain": 0.00958659721515755,
+    "maxStrain": 0.24869791480953718,
+    "maxStretch": 0.24869791480953718,
+    "maxCompression": 0.08584899163478366,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 4.8107499999996435,
+    "motion": 0.00012028196512814211,
+    "speed": 0.05773534326150821
+  },
+  {
+    "name": "closer-chest-current",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1910,
+    "triangles": 3230,
+    "ms": 7189.983875,
+    "steps": 1440,
+    "seamGap": 0.10994435243653418,
+    "meanStrain": 0.009879797316356262,
+    "maxStrain": 0.24400063851356912,
+    "maxStretch": 0.24400063851356912,
+    "maxCompression": 0.09236753928331387,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 4.6727499999997235,
+    "motion": 0.00007079477670740651,
+    "speed": 0.03398149281955513
+  },
+  {
+    "name": "relaxed-current",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 2128,
+    "triangles": 3644,
+    "ms": 7987.273,
+    "steps": 1440,
+    "seamGap": 0.11824574086876412,
+    "meanStrain": 0.009832974296483157,
+    "maxStrain": 0.2600901324529419,
+    "maxStretch": 0.2600901324529419,
+    "maxCompression": 0.0917778698190147,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 5.323875000000044,
+    "motion": 0.00010851607942037742,
+    "speed": 0.05208771812178117
+  },
+  {
+    "name": "smaller-body",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1554,
+    "triangles": 2576,
+    "ms": 5869.6335420000005,
+    "steps": 1440,
+    "seamGap": 0.10543437339976505,
+    "meanStrain": 0.007905275142813093,
+    "maxStrain": 0.14182581353457868,
+    "maxStretch": 0.14182581353457868,
+    "maxCompression": 0.09627692908977459,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 3.8697919999995065,
+    "motion": 0.028846990114180394,
+    "speed": 13.846555254806589
+  },
+  {
+    "name": "larger-body",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 2580,
+    "triangles": 4476,
+    "ms": 9259.560292,
+    "steps": 1440,
+    "seamGap": 0.11756710911580835,
+    "meanStrain": 0.009499265277698543,
+    "maxStrain": 0.24836054724617607,
+    "maxStretch": 0.24836054724617607,
+    "maxCompression": 0.12133247963845717,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 6.181416999999783,
+    "motion": 0.00015030017704639195,
+    "speed": 0.07214408498226814
+  },
+  {
+    "name": "raised-arms",
+    "settings": {
+      "body": {
+        "depth": 0.85,
+        "shoulderSlope": 30,
+        "armAngle": 60
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 7197.125167,
+    "steps": 1440,
+    "seamGap": 0.07759408961491839,
+    "meanStrain": 0.008406411326193552,
+    "maxStrain": 0.20401637717569254,
+    "maxStretch": 0.1584448306554873,
+    "maxCompression": 0.20401637717569254,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 4.795500000000175,
+    "motion": 0.00047700997987087137,
+    "speed": 0.22896479033801825
+  },
+  {
+    "name": "soft-open",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "soft",
+      "closed": false,
+      "supports": true,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 7258.334417,
+    "steps": 1440,
+    "seamGap": 0.09119273228360975,
+    "meanStrain": 0.016138089450356028,
+    "maxStrain": 0.2893786530038194,
+    "maxStretch": 0.2893786530038194,
+    "maxCompression": 0.10801103212931551,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 4.909083999999893,
+    "motion": 0.0001579403939277235,
+    "speed": 0.07581138908530728
+  },
+  {
+    "name": "unsupported",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": false,
+      "spacing": 2.8
+    },
+    "vertices": 1976,
+    "triangles": 3354,
+    "ms": 7123.514333,
+    "steps": 1440,
+    "seamGap": 0.1790478743320157,
+    "meanStrain": 0.008347662712744168,
+    "maxStrain": 0.23590587040264843,
+    "maxStretch": 0.23590587040264843,
+    "maxCompression": 0.10466682131903304,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 5.034708000000137,
+    "motion": 0.00021875342203980797,
+    "speed": 0.10500164257910782
+  },
+  {
+    "name": "finer-mesh",
+    "settings": {
+      "body": {
+        "depth": 0.66,
+        "shoulderSlope": 18,
+        "armAngle": 30
+      },
+      "solver": {
+        "timeStep": 0.0020833333333333333,
+        "iterations": 3
+      },
+      "material": "canvas",
+      "closed": true,
+      "supports": true,
+      "spacing": 2
+    },
+    "vertices": 3676,
+    "triangles": 6544,
+    "ms": 13434.763667,
+    "steps": 1440,
+    "seamGap": 0.4528966358069003,
+    "meanStrain": 0.012415092229048005,
+    "maxStrain": 0.4515984772899422,
+    "maxStretch": 0.4515984772899422,
+    "maxCompression": 0.13166365237590383,
+    "collapsedFaces": 0,
+    "penetration": 0,
+    "stepMs": 9.06800000000112,
+    "motion": 0.0005392887114227004,
+    "speed": 0.2588585814828962
+  }
+]
