@@ -14,7 +14,7 @@ import {
 export const cutLabel = (cut: Cut) =>
   `cut ${cut.count} ${cut.fabric}${cut.fold ? " on fold" : ""}${cut.mirror ? " (mirror)" : ""}`;
 
-const mapPiece = (piece: Piece, f: (p: Point) => Point): Piece => ({
+export const mapPiece = (piece: Piece, f: (p: Point) => Point): Piece => ({
   ...piece,
   edges: piece.edges.map((e) => ({ ...e, points: e.points.map(f) })),
   grain: [f(piece.grain[0]), f(piece.grain[1])],

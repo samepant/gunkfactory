@@ -6,9 +6,15 @@ import type {
 } from "../garment";
 import type { Check, Cut, Edge, Mark, Piece } from "../../pattern/pattern";
 import {
+  draftTorsoHalf,
+  type Half,
+  neckWidthFor,
+  rect,
+  standCollar,
+  type TorsoHalf,
+} from "../blocks.ts";
+import {
   add,
-  angleOf,
-  circleIntersections,
   cubic,
   dist,
   dot,
@@ -84,22 +90,10 @@ const requiredMeasurements: Garment["requiredMeasurements"] = [
   "handGirth",
 ];
 
-const BACK_NECK_RISE = 2;
-const ARMPIT_TO_SIDE_SEAM_PIN = 2.54; // the side seam measurement starts 1" below the armpit
-
-type Half = "back" | "front";
-
-interface BodyHalf {
-  neck: Point[]; // centre neck -> high neck point
-  hnp: Point;
-  shoulderTip: Point;
-  underarm: Point; // side seam at the (lowered) armhole
-  crossing: Point; // where the raglan line meets the armhole
+interface BodyHalf extends TorsoHalf {
   bodyNeck: Point[]; // centre neck -> raglan neck point
   sleeveNeck: Point[]; // raglan neck point -> high neck point
-  raglan: Point[]; // raglan neck point -> crossing
-  lowerArmhole: Point[]; // crossing -> underarm
-  shoulderSlope: number;
+  raglan: Point[]; // raglan neck point -> across, where the raglan line meets the armhole
 }
 
 const draftBodyHalf = (
@@ -108,94 +102,31 @@ const draftBodyHalf = (
   p: Record<string, number>,
   neckWidth: number
 ): BodyHalf => {
-  const isBack = half === "back";
-  const centreNeckY = -(isBack ? m.centerBack : m.centerFront);
-  const neckLength =
-    (isBack ? m.halfBackNeckline : m.halfFrontNeckline) + p.neckEase;
-
-  // quarter-ellipse neck from centre neck (horizontal) up to the high neck point (vertical)
-  const neckCurve = (depth: number) => {
-    const k = 0.5523;
-    const hnpY = centreNeckY - depth;
-    return cubic(
-      [0, centreNeckY],
-      [k * neckWidth, centreNeckY],
-      [neckWidth, hnpY + k * depth],
-      [neckWidth, hnpY]
-    );
-  };
-  const depth = isBack
-    ? BACK_NECK_RISE
-    : solve((d) => length(neckCurve(d)), neckLength, 0.2, 30);
-  const neck = neckCurve(depth);
-  const hnp = neck[neck.length - 1];
-
-  // shoulder tip: shoulder seam length from the high neck point, and the
-  // shoulder-tip-to-centre-waist length from the centre waist at (0, 0)
-  const tipToWaist = isBack
-    ? m.shoulderTipToCenterWaistBack
-    : m.shoulderTipToCenterWaistFront;
-  const tips = circleIntersections(hnp, m.shoulderSeam, [0, 0], tipToWaist);
-  if (tips.length === 0) {
-    throw new Error(
-      `can't place the ${half} shoulder tip: shoulderSeam and shoulderTipToCenterWaist${isBack ? "Back" : "Front"} don't meet. re-check them.`
-    );
-  }
-  const tip = tips[0][0] > tips[1][0] ? tips[0] : tips[1];
-  const shoulderTip: Point = [tip[0], tip[1] - p.shoulderTipRaise];
-
-  const armholeY =
-    -(m.sideSeam + ARMPIT_TO_SIDE_SEAM_PIN) + p.armholeDrop;
-  const underarm: Point = [
-    (isBack ? m.halfBackChest : m.halfFrontChest) + p.chestEase / 4,
-    armholeY,
-  ];
-  const crossing: Point = [
-    (isBack ? m.halfBackToMidArmhole : m.halfFrontToMidArmhole) + p.acrossEase,
-    armholeY - 0.35 * (armholeY - shoulderTip[1]),
-  ];
-  if (crossing[0] >= underarm[0]) {
-    throw new Error(
-      `${half} across measurement is wider than the ${half} chest. re-check them.`
-    );
-  }
-
-  const h = underarm[1] - crossing[1];
-  const w = underarm[0] - crossing[0];
-  const lowerArmhole = cubic(
-    crossing,
-    [crossing[0], crossing[1] + 0.6 * h],
-    [crossing[0] + 0.4 * w, underarm[1]],
-    underarm
-  );
+  const torso = draftTorsoHalf(half, m, {
+    neckEase: p.neckEase,
+    shoulderTipRaise: p.shoulderTipRaise,
+    armholeDrop: p.armholeDrop,
+    chestEase: p.chestEase,
+    acrossEase: p.acrossEase,
+  }, neckWidth);
+  const { neck, across } = torso;
 
   const [bodyNeck, sleeveNeck] = splitAt(neck, length(neck) - p.raglanNeck);
   const raglanNeckPoint = bodyNeck[bodyNeck.length - 1];
   const raglan = cubic(
     raglanNeckPoint,
-    lerp(raglanNeckPoint, crossing, 0.33),
-    add(crossing, [0, -0.3 * dist(raglanNeckPoint, crossing)]),
-    crossing
+    lerp(raglanNeckPoint, across, 0.33),
+    add(across, [0, -0.3 * dist(raglanNeckPoint, across)]),
+    across
   );
 
-  return {
-    neck,
-    hnp,
-    shoulderTip,
-    underarm,
-    crossing,
-    bodyNeck,
-    sleeveNeck,
-    raglan,
-    lowerArmhole,
-    shoulderSlope: angleOf(sub(shoulderTip, hnp)),
-  };
+  return { ...torso, bodyNeck, sleeveNeck, raglan };
 };
 
 interface HalfSleeve {
   overarm: Point[]; // high neck point -> hem
   underarmSeam: Point[]; // hem -> sleeve underarm point
-  underarmCurve: Point[]; // crossing -> sleeve underarm point
+  underarmCurve: Point[]; // across -> sleeve underarm point
   hemTop: Point;
   hemBottom: Point;
   bicep: number; // half-sleeve width at the underarm
@@ -218,22 +149,22 @@ const draftHalfSleeve = (
   const hemTop = add(s, scale(d, sleeveLength));
   const hemBottom = add(hemTop, scale(n, hemHalf));
 
-  // the sleeve underarm curve starts at the raglan crossing and must be as
+  // the sleeve underarm curve starts where the raglan meets the armhole and must be as
   // long as the body armhole below the crossing. slide its end along the
   // sleeve's underside line until the lengths match.
   const underside = add(s, scale(n, halfWidth));
   const curveTo = (end: Point) => {
     const u = norm(sub(hemBottom, end));
-    const k = dist(body.crossing, end) / 3;
+    const k = dist(body.across, end) / 3;
     return cubic(
-      body.crossing,
-      add(body.crossing, [0, k]),
+      body.across,
+      add(body.across, [0, k]),
       sub(end, scale(perp(u), k)),
       end
     );
   };
   const at = (t: number) => add(underside, scale(d, t));
-  const closest = Math.max(0, dot(sub(body.crossing, underside), d));
+  const closest = Math.max(0, dot(sub(body.across, underside), d));
   const t = solve(
     (t) => length(curveTo(at(t))),
     length(body.lowerArmhole),
@@ -284,13 +215,6 @@ const midNotches =(pts: Point[], count: number): Point[] => {
   return count === 1 ? [pointAt(pts, mid)] : [pointAt(pts, mid - 0.5), pointAt(pts, mid + 0.5)];
 };
 
-const rect = (w: number, h: number, sa: number, topSa = sa): Edge[] => [
-  { points: [[0, 0], [w, 0]], sa: topSa },
-  { points: [[w, 0], [w, h]], sa },
-  { points: [[w, h], [0, h]], sa },
-  { points: [[0, h], [0, 0]], sa },
-];
-
 const draft = (m: MeasurementsCm, params: GarmentParams) => {
   const p = params as Record<string, number>;
   const overlap = params.closure === "overlap";
@@ -299,23 +223,7 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
   const hemSa = p.hemAllowance;
   const hemY = p.lengthBelowWaist;
 
-  // the back neck rise is fixed, so its width sets the neck; the front
-  // shares that width and gets its depth from the front neckline length
-  const backNeckWidth = solve(
-    (w) =>
-      length(
-        cubic(
-          [0, 0],
-          [0.5523 * w, 0],
-          [w, -BACK_NECK_RISE + 0.5523 * BACK_NECK_RISE],
-          [w, -BACK_NECK_RISE]
-        )
-      ),
-    m.halfBackNeckline + p.neckEase,
-    0.5,
-    30
-  );
-
+  const backNeckWidth = neckWidthFor(m, p.neckEase);
   const back = draftBodyHalf("back", m, p, backNeckWidth);
   const front = draftBodyHalf("front", m, p, backNeckWidth);
   const backSleeve = draftHalfSleeve(back, m, p);
@@ -421,30 +329,13 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
   const backNeckLength = length(back.neck);
   const frontNeckLength = length(front.neck);
   const collarLength = backNeckLength + frontNeckLength + ext;
-  const collarBottom = (span: number) =>
-    cubic([0, 0], [span * 0.4, 0], [span * 0.75, 0], [span, -p.collarRise]);
-  const span = solve(
-    (s) => length(collarBottom(s)),
-    collarLength,
-    collarLength * 0.5,
-    collarLength
-  );
-  const bottom = collarBottom(span);
-  const top = bottom.map(([x, y]): Point => [x, y - p.collarHeight]);
-  const collarEnd = bottom[bottom.length - 1];
+  const collar = standCollar(collarLength, p.collarHeight, p.collarRise, sa);
+  const bottom = collar.bottom;
   pieces.push({
     name: "collar",
     cut: { fabric: "shell", count: 2, fold: true },
-    edges: [
-      { points: bottom, sa },
-      { points: [collarEnd, top[top.length - 1]], sa },
-      { points: reverse(top), sa },
-      { points: [top[0], bottom[0]], sa: 0, fold: true },
-    ],
-    grain: [
-      [2, -p.collarHeight / 2],
-      [span - 4, -p.collarHeight / 2],
-    ],
+    edges: collar.edges,
+    grain: collar.grain,
     notches: [
       pointAt(bottom, backNeckLength - p.raglanNeck),
       pointAt(bottom, backNeckLength),

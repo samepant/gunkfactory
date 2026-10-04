@@ -127,14 +127,16 @@ const signedArea = (pts: Point[]) => {
 };
 
 // offsets a closed outline made of consecutive edges, each by its own
-// distance, and joins neighbouring segments at their intersections
+// distance, and joins neighbouring segments at their intersections. joins
+// that would spike out (near-tangent edges with different allowances) are
+// bevelled instead.
 export const offsetOutline = (
   edges: { points: Point[]; sa: number }[]
 ): Point[] => {
   const outline = edges.flatMap((e) => e.points.slice(0, -1));
   const sign = signedArea(outline) > 0 ? 1 : -1;
 
-  const segments: [Point, Point][] = [];
+  const segments: { from: Point; to: Point; end: Point; sa: number }[] = [];
   for (const edge of edges) {
     for (let i = 1; i < edge.points.length; i++) {
       const a = edge.points[i - 1];
@@ -142,16 +144,20 @@ export const offsetOutline = (
       if (dist(a, b) < 1e-6) continue;
       const d = norm(sub(b, a));
       const n = scale([d[1], -d[0]], sign * edge.sa);
-      segments.push([add(a, n), add(b, n)]);
+      segments.push({ from: add(a, n), to: add(b, n), end: b, sa: edge.sa });
     }
   }
 
-  return segments.map((a, i) => {
+  return segments.flatMap((a, i) => {
     const b = segments[(i + 1) % segments.length];
-    const da = norm(sub(a[1], a[0]));
-    const db = norm(sub(b[1], b[0]));
+    const da = norm(sub(a.to, a.from));
+    const db = norm(sub(b.to, b.from));
     const nearlyParallel = Math.abs(da[0] * db[1] - da[1] * db[0]) < 1e-3;
-    if (nearlyParallel) return lerp(a[1], b[0], 0.5);
-    return lineIntersection(a[0], da, b[0], db) ?? a[1];
+    if (nearlyParallel) {
+      return dist(a.to, b.from) < 1e-3 ? [lerp(a.to, b.from, 0.5)] : [a.to, b.from];
+    }
+    const join = lineIntersection(a.from, da, b.from, db) ?? a.to;
+    const limit = 4 * Math.max(a.sa, b.sa, 0.5);
+    return dist(join, a.end) > limit ? [a.to, b.from] : [join];
   });
 };

@@ -67,6 +67,7 @@ const DEFAULT_FABRIC_WIDTHS: Record<string, number> = {
   lining: 150,
   "sleeve lining": 140,
   rib: 50,
+  pocketing: 112,
 };
 const FABRIC_SPACING = 30;
 
