@@ -1,27 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useLocalStorage, useWindowSize } from "usehooks-ts";
+import { useWindowSize } from "usehooks-ts";
+import { Link } from "react-router-dom";
 import clsx from "clsx";
-import {
-  Garment,
-  GarmentParams,
-  GunkUnits,
-  MeasurementsCm,
-} from "../../garments/garment";
-import {
-  fileSlopers,
-  fromCm,
-  measurementsInCm,
-  toCm,
-  toSloperFile,
-} from "../../measurements";
-import { useSloperStorage } from "../../hooks/useSloperStorage";
+import { Garment, GunkUnits } from "../../garments/garment";
+import { formatLength, fromCm, toCm } from "../../measurements";
+import { packFabrics, useDraft, useFabricSettings } from "../../hooks/useDraft";
 import { Point } from "../../pattern/geometry.ts";
 import { Check, Piece } from "../../pattern/pattern";
-import { cutList, pack } from "../../pattern/production.ts";
 import { PieceDefs, PieceDrawing } from "../piece-drawing";
 import { PlacedPiece, placePiece } from "../piece-drawing/place.ts";
 import Projector, { FabricLayout } from "../projector";
-import { formatCamelCaseWithSpaces } from "../../util/formatting";
 import classes from "./pattern-view.module.css";
 
 // everything inside the svg is in cm; `scale` is screen px per cm
@@ -56,19 +44,8 @@ const layoutPieces = (pieces: Piece[]) => {
   return { placed, width, height: y + rowHeight };
 };
 
-const formatLength = (cm: number, unit: GunkUnits) =>
-  `${fromCm(cm, unit).toFixed(unit === "in" ? 2 : 1)} ${unit}`;
-
 type Mode = "pattern" | "packing";
 
-// usable widths (between selvedges) until the user sets their own
-const DEFAULT_FABRIC_WIDTHS: Record<string, number> = {
-  shell: 150,
-  lining: 150,
-  "sleeve lining": 140,
-  rib: 50,
-  pocketing: 112,
-};
 const FABRIC_SPACING = 30;
 
 const CheckRow = ({ check, unit }: { check: Check; unit: GunkUnits }) => (
@@ -79,72 +56,20 @@ const CheckRow = ({ check, unit }: { check: Check; unit: GunkUnits }) => (
 );
 
 const PatternView = ({ garment }: { garment: Garment }) => {
-  const { storedSlopers } = useSloperStorage();
-  const slopers = useMemo(
-    () => [...fileSlopers, ...storedSlopers.map(toSloperFile)],
-    [storedSlopers]
-  );
-  const [sloperName, setSloperName] = useLocalStorage("pattern-sloper", "");
-  const sloper = slopers.find((s) => s.name === sloperName) ?? slopers[0];
-  const unit = sloper?.unit ?? "cm";
-
-  const [savedParams, setSavedParams] = useLocalStorage<GarmentParams>(
-    `params-${garment.slug}`,
-    {}
-  );
+  const { slopers, sloper, setSloperName, unit, params, savedParams, setSavedParams, result } =
+    useDraft(garment);
   const [resetCount, setResetCount] = useState(0);
-  const params = useMemo(
-    () => ({
-      ...Object.fromEntries(garment.params.map((p) => [p.slug, p.default])),
-      ...savedParams,
-    }),
-    [garment, savedParams]
-  );
-
-  const result = useMemo(() => {
-    if (!sloper) {
-      return { error: "no sloper yet. add a json file to /slopers or make one in the sloper form." };
-    }
-    const measurements = measurementsInCm(sloper);
-    const missing = garment.requiredMeasurements.filter((k) => !measurements[k]);
-    if (missing.length > 0) {
-      return {
-        error: `${sloper.name} is missing: ${missing.map(formatCamelCaseWithSpaces).join(", ")}`,
-      };
-    }
-    try {
-      const draft = garment.draft(measurements as MeasurementsCm, params);
-      return { draft, fabrics: [...new Set(draft.pieces.map((p) => p.cut.fabric))] };
-    } catch (e) {
-      return { error: (e as Error).message };
-    }
-  }, [sloper, garment, params]);
 
   // --- packing: every copy to cut, nested per fabric
   const [mode, setMode] = useState<Mode>("pattern");
   const [projecting, setProjecting] = useState(false);
-  const [fabricWidths, setFabricWidths] = useLocalStorage<Record<string, number>>("fabric-widths", {});
-  const [allowRotate, setAllowRotate] = useLocalStorage("fabric-allow-rotate", true);
-  const fabricWidth = (fabric: string) =>
-    fabricWidths[fabric] ?? DEFAULT_FABRIC_WIDTHS[fabric] ?? 150;
+  const { fabricWidths, setFabricWidths, allowRotate, setAllowRotate, fabricWidth } =
+    useFabricSettings();
 
-  const packing = useMemo((): { layouts?: FabricLayout[]; error?: string } | null => {
+  const packing = useMemo(() => {
     if (!result.draft || (mode !== "packing" && !projecting)) return null;
-    const copies = cutList(result.draft.pieces);
-    try {
-      const layouts = (result.fabrics ?? []).map((fabric) => {
-        const width = fabricWidths[fabric] ?? DEFAULT_FABRIC_WIDTHS[fabric] ?? 150;
-        const packed = pack(
-          copies.filter((c) => c.cut.fabric === fabric),
-          { width, gap: 0.5, allowRotate }
-        );
-        return { fabric, width, length: packed.length, placed: packed.pieces.map((p) => placePiece(p)) };
-      });
-      return { layouts };
-    } catch (e) {
-      return { error: (e as Error).message };
-    }
-  }, [result, mode, projecting, fabricWidths, allowRotate]);
+    return packFabrics(result.draft.pieces, result.fabrics, fabricWidth, allowRotate);
+  }, [result, mode, projecting, fabricWidth, allowRotate]);
 
   // what the canvas shows: the pieces laid out, or each fabric with its packing
   const scene = useMemo(() => {
@@ -279,6 +204,9 @@ const PatternView = ({ garment }: { garment: Garment }) => {
             <button onClick={startProjecting} disabled={!result.draft}>
               project
             </button>
+            <Link to={`/techpack/${garment.slug}`} className="button">
+              tech pack
+            </Link>
           </div>
         </div>
 

@@ -4,12 +4,16 @@ import type {
   GarmentParams,
   MeasurementsCm,
 } from "../garment";
-import type { Check, Cut, Edge, Mark, Piece } from "../../pattern/pattern";
+import type { Check, Cut, Edge, Mark, Measure, Piece, SketchLine, Trim } from "../../pattern/pattern";
 import {
+  bothSides,
+  collarBand,
   draftTorsoHalf,
   type Half,
+  mirrorX,
   neckWidthFor,
   rect,
+  seamOutline,
   standCollar,
   type TorsoHalf,
 } from "../blocks.ts";
@@ -501,7 +505,69 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
     },
   ];
 
-  return { pieces, checks };
+  // --- tech pack: flat drawings, points of measure, trims
+  const outlineOf = (name: string) =>
+    seamOutline(pieces.find((piece) => piece.name === name)?.edges ?? []);
+  const backHalf = seamOutline(pieces[0].edges.slice(0, -1)); // drop the fold
+  const pocketRect: Point[] = [
+    [pocketLeft, pocketTop],
+    [pocketRight, pocketTop],
+    [pocketRight, pocketBottom],
+    [pocketLeft, pocketBottom],
+  ];
+  const closureLines: SketchLine[] = overlap
+    ? snaps.map((s): SketchLine => {
+        const [x, y] = s.points[0];
+        return { points: [[x - 0.7, y], [x + 0.7, y], [x, y], [x, y - 0.7], [x, y + 0.7]], kind: "detail" };
+      })
+    : [{ points: [[0, frontNeckY - p.collarHeight], [0, hemY]], kind: "detail" }];
+  const views = {
+    front: {
+      lines: [
+        ...bothSides(collarBand([[-ext, frontNeckY], ...front.neck], p.collarHeight)),
+        ...bothSides({ points: outlineOf("front sleeve"), closed: true }),
+        ...bothSides({ points: outlineOf("front"), closed: true }),
+        ...bothSides({ points: pocketRect, closed: true }),
+        ...closureLines,
+      ] as SketchLine[],
+      callouts: [
+        { at: pointAt(front.raglan, length(front.raglan) / 2), text: "two-piece raglan sleeve" },
+        { at: [front.neck[front.neck.length - 1][0], frontNeckY - p.collarHeight] as Point, text: "stand storm collar with throat tab" },
+        { at: [0, (frontNeckY + pocketTop) / 2] as Point, text: overlap ? "snap or button closure on an overlap extension" : "separating zip closure" },
+        { at: [(pocketLeft + pocketRight) / 2, pocketTop] as Point, text: "patch pocket" },
+        { at: lerp(frontSleeve.hemTop, frontSleeve.hemBottom, 0.5), text: "plain sleeve hem, rib storm cuff on the sleeve lining inside" },
+      ],
+    },
+    back: {
+      lines: [
+        ...bothSides(collarBand(back.neck, p.collarHeight)),
+        ...bothSides({ points: outlineOf("back sleeve"), closed: true }),
+        { points: [...backHalf, ...reverse(mirrorX(backHalf))], closed: true },
+      ] as SketchLine[],
+      callouts: [
+        { at: [0, (backNeckY + hemY) / 2] as Point, text: "one-piece back, cut on the fold" },
+        { at: pointAt(backSleeve.overarm, length(backSleeve.overarm) / 2), text: "overarm seam, neck to hem" },
+      ],
+    },
+  };
+  const measures: Measure[] = [
+    { label: "chest / hem, finished", cm: finishedChest },
+    { label: "centre back length, neck seam to hem", cm: hemY - backNeckY },
+    { label: "sleeve length, high neck point to hem", cm: backOverarm },
+    { label: "bicep", cm: backSleeve.bicep + frontSleeve.bicep },
+    { label: "sleeve opening", cm: sleeveHem },
+    { label: "collar height", cm: p.collarHeight },
+    { label: "patch pocket width", cm: p.pocketWidth },
+    { label: "patch pocket height", cm: p.pocketHeight },
+  ];
+  const trims: Trim[] = overlap
+    ? [{ name: "snaps or buttons", count: p.snapCount + 1, description: "front closure plus throat tab" }]
+    : [
+        { name: "separating zip", count: 1, cm: hemY - frontNeckY + p.collarHeight },
+        { name: "snap", count: 1, description: "throat tab" },
+      ];
+
+  return { pieces, checks, views, measures, trims };
 };
 
 const instructions = `Make a toile in cheap cotton first. Waxed cotton keeps every needle hole, so you can't unpick fit mistakes.
@@ -531,6 +597,12 @@ const jacket26a: Garment = {
   params,
   requiredMeasurements,
   instructions,
+  fabrics: {
+    shell: { description: "heavyweight waxed cotton" },
+    lining: { description: "wool suiting or coating" },
+    "sleeve lining": { description: "slippery lining: cupro, bemberg or cotton sateen" },
+    rib: { description: "rib knit, for the inner storm cuffs" },
+  },
   draft,
 };
 

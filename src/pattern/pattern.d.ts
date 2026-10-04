@@ -36,7 +36,42 @@ export interface Check {
   warn?: boolean;
 }
 
+// flat drawing of the garment as worn, in drafting coordinates. the
+// wearer's left is on the viewer's right in the front view.
+export interface SketchLine {
+  points: Point[];
+  closed?: boolean;
+  kind?: "outline" | "stitch" | "detail";
+}
+
+export interface Callout {
+  at: Point;
+  text: string;
+}
+
+export interface Sketch {
+  lines: SketchLine[];
+  callouts: Callout[];
+}
+
+// a point of measure on the finished garment
+export interface Measure {
+  label: string;
+  cm: number;
+  tolerance?: number; // ± cm
+}
+
+export interface Trim {
+  name: string;
+  count: number;
+  cm?: number; // length, for zips and tapes
+  description?: string;
+}
+
 export interface DraftResult {
   pieces: Piece[];
   checks: Check[];
+  views?: { front: Sketch; back: Sketch };
+  measures?: Measure[];
+  trims?: Trim[];
 }

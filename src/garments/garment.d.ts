@@ -14,6 +14,8 @@ export interface Garment {
   params: GarmentParamDescriptor[];
   requiredMeasurements: (keyof Measurements)[];
   instructions: string; // plain-text sewing guide, shown alongside the pattern
+  // descriptions for the fabrics named in each piece's cut, for the tech pack
+  fabrics?: Record<string, { description?: string; color?: string }>;
   draft: (measurements: MeasurementsCm, params: GarmentParams) => DraftResult;
 }
 

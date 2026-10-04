@@ -466,6 +466,9 @@ const cmPer: Record<GunkUnits, number> = { cm: 1, mm: 0.1, in: 2.54 };
 export const toCm = (value: number, unit: GunkUnits) => value * cmPer[unit];
 export const fromCm = (cm: number, unit: GunkUnits) => cm / cmPer[unit];
 
+export const formatLength = (cm: number, unit: GunkUnits) =>
+  `${fromCm(cm, unit).toFixed(unit === "in" ? 2 : 1)} ${unit}`;
+
 export const measurementsInCm = (file: SloperFile) =>
   Object.fromEntries(
     Object.entries(file.measurements).map(([key, value]) => [

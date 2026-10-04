@@ -1,5 +1,5 @@
 import type { MeasurementsCm } from "./garment";
-import type { Edge } from "../pattern/pattern";
+import type { Edge, SketchLine } from "../pattern/pattern";
 import {
   angleOf,
   circleIntersections,
@@ -173,3 +173,21 @@ export const rect = (w: number, h: number, sa: number, topSa = sa): Edge[] => [
   { points: [[w, h], [0, h]], sa },
   { points: [[0, h], [0, 0]], sa },
 ];
+
+// --- flat drawing helpers
+
+export const seamOutline = (edges: Edge[]): Point[] => edges.flatMap((e) => e.points);
+
+export const mirrorX = (points: Point[]): Point[] => points.map(([x, y]) => [-x, y]);
+
+// a line drawn on one half, plus its mirror on the other half
+export const bothSides = (line: SketchLine): SketchLine[] => [
+  line,
+  { ...line, points: mirrorX(line.points) },
+];
+
+// a stand collar drawn as a band rising off the neckline
+export const collarBand = (neck: Point[], height: number): SketchLine => ({
+  points: [...neck, ...reverse(neck).map(([x, y]): Point => [x, y - height])],
+  closed: true,
+});

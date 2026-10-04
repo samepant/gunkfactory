@@ -4,13 +4,17 @@ import type {
   GarmentParams,
   MeasurementsCm,
 } from "../garment";
-import type { Check, Edge, Mark, Piece } from "../../pattern/pattern";
+import type { Check, Edge, Mark, Measure, Piece, SketchLine, Trim } from "../../pattern/pattern";
 import { mapPiece } from "../../pattern/production.ts";
 import {
+  bothSides,
+  collarBand,
   draftTorsoHalf,
   type Half,
+  mirrorX,
   neckWidthFor,
   rect,
+  seamOutline,
   standCollar,
   type TorsoHalf,
 } from "../blocks.ts";
@@ -205,6 +209,7 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
   // rounded rectangle topstitched through both after the lining is bagged.
   const chestMarks: Mark[] = [];
   const chestPieces: Piece[] = [];
+  const chestSketch: SketchLine[] = [];
   const zipX = p.chestZipFromCF;
   const zipTop = frontNeckY + p.chestZipTop;
   const zipBottom = zipTop + p.chestZipLength;
@@ -242,10 +247,16 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
         points: [[x - win, y + p.chestZipLength], [x, y + p.chestZipLength - win], [x + win, y + p.chestZipLength]],
       },
     ];
-    chestMarks.push(...window(zipX, zipTop), {
-      kind: "dash",
-      points: roundedRect(bag.x0, bag.y0, bag.x1, bag.y1, p.chestBagRadius),
-    });
+    const bagLine = roundedRect(bag.x0, bag.y0, bag.x1, bag.y1, p.chestBagRadius);
+    chestMarks.push(...window(zipX, zipTop), { kind: "dash", points: bagLine });
+    chestSketch.push(
+      {
+        points: [[zipX - win, zipTop], [zipX + win, zipTop], [zipX + win, zipBottom], [zipX - win, zipBottom]],
+        closed: true,
+        kind: "detail",
+      },
+      { points: bagLine, kind: "stitch" }
+    );
     const facingW = 2 * win + 8;
     chestPieces.push({
       name: "chest zip facing",
@@ -384,12 +395,63 @@ const draft = (m: MeasurementsCm, params: GarmentParams) => {
     { label: "collar length (half)", cm: collarLength },
   ];
 
-  return { pieces, checks };
+  // --- tech pack: flat drawings, points of measure, trims
+  const hasChest = params.chestPocket !== "none";
+  const onChestSide = (pt: Point): Point =>
+    params.chestPocket === "right" ? [-pt[0], pt[1]] : pt;
+  const backHalf = seamOutline(backEdges.slice(0, -1));
+  const views = {
+    front: {
+      lines: [
+        ...bothSides(collarBand(frontNeck, p.collarHeight)),
+        ...bothSides({ points: seamOutline(frontEdges), closed: true }),
+        ...bothSides({ points: pocketOutline, closed: true }),
+        ...bothSides({ points: opening, kind: "detail" }),
+        ...chestSketch.map((l) => ({ ...l, points: l.points.map(onChestSide) })),
+        { points: [[0, frontNeckY - p.collarHeight], [0, hemY - round]], kind: "detail" },
+      ] as SketchLine[],
+      callouts: [
+        { at: [0, (frontNeckY + top) / 2] as Point, text: "exposed separating zip, collar top to hem curve" },
+        { at: [neckWidth / 2, frontNeckY - p.collarHeight / 2] as Point, text: "low mock neck stand collar, lined" },
+        { at: pointAt(opening, length(opening) / 2), text: "hand-warmer pocket: bias-bound side opening, caught in side seam and hem" },
+        ...(hasChest
+          ? [{ at: onChestSide([zipX, zipTop + p.chestZipLength / 2]), text: "vertical zip chest pocket in a faced window, bag topstitched through shell and lining" }]
+          : []),
+        { at: [zipEdge + round / 2, hemY - round / 2] as Point, text: "front hem rounds up into the zip" },
+      ],
+    },
+    back: {
+      lines: [
+        ...bothSides(collarBand(back.neck, p.collarHeight)),
+        { points: [...backHalf, ...reverse(mirrorX(backHalf))], closed: true },
+      ] as SketchLine[],
+      callouts: [
+        { at: [0, (backNeckY + hemY) / 2] as Point, text: "one-piece back, cut on the fold" },
+        { at: back.across, text: "armholes bagged to the lining and topstitched" },
+      ],
+    },
+  };
+  const measures: Measure[] = [
+    { label: "chest / hem, finished", cm: finishedChest },
+    { label: "centre back length, neck seam to hem", cm: hemY - backNeckY },
+    { label: "front length, high neck point to hem", cm: hemY - front.hnp[1] },
+    { label: "shoulder seam", cm: dist(back.hnp, backTip) },
+    { label: "armhole, each", cm: length(backArmhole.points) + length(frontArmhole.points) },
+    { label: "collar height", cm: p.collarHeight },
+    { label: "hand-warmer pocket height", cm: p.pocketHeight },
+    ...(hasChest ? [{ label: "chest pocket opening", cm: p.chestZipLength }] : []),
+  ];
+  const trims: Trim[] = [
+    { name: "separating zip", count: 1, cm: zipLength, description: "teeth exposed between the front edges" },
+    ...(hasChest ? [{ name: "chest pocket zip, non-separating", count: 1, cm: p.chestZipLength }] : []),
+  ];
+
+  return { pieces, checks, views, measures, trims };
 };
 
 const instructions = `Canvas shell, fleece or wool coating lining, and a separating zip with its teeth on show. Grade the seam allowances wherever the canvas and lining are sewn together, and clip the curves.
 
-1. Cut. Follow the cut label on each piece. Transfer the notches and the pocket placement. Cut the binding on the bias. Thread-trace the chest pocket bag line onto the right side of its front, because chalk will rub off before step 13.
+1. Cut. Follow the cut label on each piece. Transfer the notches and the pocket placement. Cut the binding on the bias. Thread-trace the chest pocket bag line onto the right side of its front, because chalk will rub off before step 14.
 2. Pocket openings. Bind the curved opening of each pocket. Press the top and inner edges under along the seam line.
 3. Pockets on. Place each pocket on its front at the dashed placement. Topstitch the top and inner edges. Baste the side and bottom inside the seam allowance, so they get caught in the side seam and hem.
 4. Chest zip window (shell only). Lay the facing on the front's right side over the window mark, right sides together. Stitch the window rectangle. Cut along the slash, snip into each corner, turn the facing through to the wrong side and press. Set the chest zip behind the window and edgestitch around it.
@@ -411,6 +473,11 @@ const vest26a: Garment = {
   params,
   requiredMeasurements,
   instructions,
+  fabrics: {
+    shell: { description: "canvas / cotton duck" },
+    lining: { description: "fleece or wool coating" },
+    pocketing: { description: "light, tightly woven cotton (poplin or shirting)" },
+  },
   draft,
 };
 

@@ -6,6 +6,7 @@ import { Garment } from "./garments/garment";
 import SloperForm from "./components/sloper/index.tsx";
 import GunkCad from "./components/gunk-cad/index.tsx";
 import Homepage from "./components/homepage/index.tsx";
+import TechPack from "./components/techpack/index.tsx";
 import { SavedSloper } from "./measurements/index.ts";
 
 const router = createHashRouter([
@@ -22,6 +23,10 @@ const router = createHashRouter([
         element: <GunkCad />,
       },
     ],
+  },
+  {
+    path: "/techpack/:slug",
+    element: <TechPack />,
   },
 ]);
 
